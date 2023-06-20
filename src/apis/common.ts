@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-const apiUrl ="";
+const apiUrl = '';
 
 /*
 [[ API 타입 & 유틸 함수 ]]
@@ -26,18 +26,13 @@ export interface ApiError {
  * @param error 처리할 에러
  * @param getErrorMessage status code에 따라 에러 메시지를 결정하는 함수
  */
-function processError(
-  error: unknown,
-  errorMessages?: Record<number, string>,
-): ApiError {
+function processError(error: unknown, errorMessages?: Record<number, string>): ApiError {
   if (axios.isAxiosError(error)) {
     if (error.response) {
       // 요청 전송 성공, 서버 응답 성공, 그러나 상태 코드가 2xx 이외
       return {
         statusCode: error.response.status,
-        errorMessage:
-          errorMessages?.[error.response.status] ??
-          '문제가 발생했어요. 다시 시도하거나 문의해 주세요.',
+        errorMessage: errorMessages?.[error.response.status] ?? '문제가 발생했어요. 다시 시도하거나 문의해 주세요.',
         info: error.response.data,
       };
     }
@@ -46,8 +41,7 @@ function processError(
       // 요청 전송 성공, 그러나 서버 응답 없음
       return {
         statusCode: -1,
-        errorMessage:
-          '서버와 연결하지 못했어요. 인터넷 연결 상태를 확인하고 다시 시도해 주세요.',
+        errorMessage: '서버와 연결하지 못했어요. 인터넷 연결 상태를 확인하고 다시 시도해 주세요.',
         info: error.request,
       };
     }
@@ -85,7 +79,6 @@ export async function getAsync<T, D>(
       responseType: 'json',
       ...config,
     });
-    
 
     return response.data;
   } catch (error) {
@@ -172,7 +165,7 @@ export async function patchAsync<T, D>(
       ...config,
     });
 
-    return response.data
+    return response.data;
   } catch (error) {
     throw processError(error, errorMessages);
   }
