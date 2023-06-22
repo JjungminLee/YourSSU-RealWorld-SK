@@ -3,19 +3,35 @@ import useInput from './atom/input';
 import Footer from '../common/Footer';
 import Navbar from '../common/Navbar';
 import { postSignIn } from '@src/apis/user';
+import { ILogin } from '@src/types/user';
+import { UserDto } from '@src/types/user';
 import './style.css';
+import { useRecoilState } from 'recoil';
+import { userAtom } from '@src/states/UserAtom';
+import { useNavigate } from 'react-router';
 
 export default function UserLogin() {
   const [password, onChangePassword] = useInput('');
   const [email, onChangeEmail] = useInput('');
+  const [result, setResult] = useRecoilState(userAtom);
+  const navigate = useNavigate();
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const info: PostSignInReq = {
+    const info: ILogin = {
       email: email,
       password: password,
     };
-    postSignIn(info);
+    const req: PostSignInReq = {
+      user: info,
+    };
+    const response = postSignIn(req);
+
+    response.then((item) => {
+      setResult(item);
+      navigate('/');
+      console.log(result);
+    });
   };
   return (
     <>
@@ -52,7 +68,7 @@ export default function UserLogin() {
                   />
                 </fieldset>
 
-                <button className="btn btn-lg btn-primary pull-xs-right">Sign up</button>
+                <button className="btn btn-lg btn-primary pull-xs-right">Sign In</button>
               </form>
             </div>
           </div>

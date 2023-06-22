@@ -61,7 +61,7 @@ export default function Navbar() {
               </li>
 
               <li className="nav-item">
-                <div className="nav-link" onClick={onLoginChange}>
+                <div className="nav-link active" onClick={onLoginChange}>
                   Sign in
                 </div>
               </li>

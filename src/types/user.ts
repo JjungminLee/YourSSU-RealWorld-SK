@@ -1,4 +1,4 @@
-export interface UserResponseDto<T> {
+export interface UserDto<T> {
   user: T;
 }
 
@@ -21,7 +21,7 @@ export interface IGetUser {
   image: string;
 }
 
-export type PostSignUpRes = UserResponseDto<IGetUser>;
-export type PostSignUpReq = ISignUp;
-export type PostSignInReq = ILogin;
-export type PostSignInRes = UserResponseDto<IGetUser>;
+export type PostSignUpRes = UserDto<IGetUser>;
+export type PostSignUpReq = UserDto<ISignUp>;
+export type PostSignInReq = UserDto<ILogin>;
+export type PostSignInRes = UserDto<IGetUser>;

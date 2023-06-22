@@ -3,22 +3,38 @@ import { PostSignUpReq } from '@src/types/user';
 import Navbar from '../common/Navbar';
 import Footer from '../common/Footer';
 import { postSignUp } from '@src/apis/user';
+import { ISignUp } from '@src/types/user';
+import { useNavigate } from 'react-router';
+
+import { UserDto } from '@src/types/user';
+import { useRecoilState } from 'recoil';
+import { userAtom } from '@src/states/UserAtom';
 
 export default function SignUp() {
+  const navigate = useNavigate();
   const [name, onChangeName] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [email, onChangeEmail] = useInput('');
+  const [result, setResult] = useRecoilState(userAtom);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const info: PostSignUpReq = {
+    const info: ISignUp = {
       username: name,
       email: email,
       password: password,
     };
-    console.log(info);
-    const res = postSignUp(info);
-    console.log(res);
+    const req: PostSignUpReq = {
+      user: info,
+    };
+    const response = postSignUp(req);
+    response
+      .then((item) => {
+        setResult(item);
+        navigate('/');
+      })
+      .catch((error) => console.log(error));
+    navigate('/');
   };
   return (
     <>

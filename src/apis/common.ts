@@ -109,7 +109,6 @@ export async function postAsync<T, D>(
       responseType: 'json',
       ...config,
     });
-
     return response.data;
   } catch (error) {
     console.log(error);
