@@ -1,23 +1,21 @@
-import { ISignUp, PostSignUpReq } from '@src/types/user';
+import { ISignUp, PostSignInReq, PostSignUpReq } from '@src/types/user';
 import useInput from './atom/input';
-import postSignUp from '../../apis/user';
 import Footer from '../common/Footer';
 import Navbar from '../common/Navbar';
+import { postSignIn } from '@src/apis/user';
+import './style.css';
 
 export default function UserLogin() {
-  const [name, onChangeName] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [email, onChangeEmail] = useInput('');
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const info: PostSignUpReq = {
-      username: name,
+    const info: PostSignInReq = {
       email: email,
       password: password,
     };
-    const res = postSignUp(info);
-    console.log(res);
+    postSignIn(info);
   };
   return (
     <>
@@ -26,7 +24,7 @@ export default function UserLogin() {
         <div className="container page">
           <div className="row">
             <div className="col-md-6 offset-md-3 col-xs-12">
-              <h1 className="text-xs-center">Sign up</h1>
+              <h1 className="text-xs-center">Sign In</h1>
               <p className="text-xs-center">
                 <a href="">Have an account?</a>
               </p>
@@ -35,15 +33,6 @@ export default function UserLogin() {
                 <li>That email is already taken</li>
                 </ul> */}
               <form onSubmit={onSubmit}>
-                <fieldset className="form-group">
-                  <input
-                    className="form-control form-control-lg"
-                    type="text"
-                    placeholder="Your Name"
-                    value={name}
-                    onChange={onChangeName}
-                  />
-                </fieldset>
                 <fieldset className="form-group">
                   <input
                     className="form-control form-control-lg"

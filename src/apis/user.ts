@@ -1,14 +1,13 @@
-import {  ISignUp, PostSignUpReq, PostSignUpRes } from "@src/types/user"
-import { postAsync } from "./common"
+import { ISignUp, PostSignInReq, PostSignInRes, PostSignUpReq, PostSignUpRes } from '@src/types/user';
+import { postAsync } from './common';
 
- const postSignUp= async(info:ISignUp)=>{
-    
-    const response = await postAsync<PostSignUpRes,PostSignUpReq>(
-        '/users',
-       info
-    );
+export async function postSignUp(info: ISignUp) {
+  const response = await postAsync<PostSignUpRes, PostSignUpReq>('/users', info);
 
-    return response;
+  return response;
 }
 
-export default postSignUp;
+export async function postSignIn(info: PostSignInReq) {
+  const response = await postAsync<PostSignInRes, PostSignInReq>('/users/login', info);
+  return response;
+}
