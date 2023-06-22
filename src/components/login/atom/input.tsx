@@ -1,7 +1,7 @@
 import {  ChangeEvent, useState } from "react";
 
 
-export default function useInput<T>(initialState:string){
+export default function useInput(initialState:string){
 
     const [input,setInput]=useState<any>(initialState);
    
