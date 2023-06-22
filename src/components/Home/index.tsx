@@ -1,6 +1,8 @@
 import { useGetTag } from '@src/hooks/useGetTag';
 import PopularTag from './atoms/PopularTag';
 import { useEffect } from 'react';
+import Navbar from '../common/Navbar';
+import Footer from '../common/Footer';
 
 export default function Home() {
   // 임의 데이터
@@ -12,6 +14,7 @@ export default function Home() {
 
   return (
     <>
+      <Navbar />
       <div className="home-page">
         <div className="banner">
           <div className="container">
@@ -64,6 +67,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }
