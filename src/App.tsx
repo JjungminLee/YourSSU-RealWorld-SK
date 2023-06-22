@@ -1,8 +1,3 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-
-import styled from '@emotion/styled/macro';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { StrictMode } from 'react';
 import { RecoilRoot } from 'recoil';

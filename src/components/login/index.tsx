@@ -1,10 +1,9 @@
-import { ISignUp, PostSignInReq, PostSignUpReq } from '@src/types/user';
+import { PostSignInReq } from '@src/types/user';
 import useInput from './atom/input';
 import Footer from '../common/Footer';
 import Navbar from '../common/Navbar';
 import { postSignIn } from '@src/apis/user';
 import { ILogin } from '@src/types/user';
-import { UserDto } from '@src/types/user';
 import './style.css';
 import { useRecoilState } from 'recoil';
 import { userAtom } from '@src/states/UserAtom';
@@ -30,7 +29,6 @@ export default function UserLogin() {
     response.then((item) => {
       setResult(item);
       navigate('/');
-      console.log(result);
     });
   };
   return (
