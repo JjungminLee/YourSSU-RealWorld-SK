@@ -1,6 +1,15 @@
+import { useGetTag } from '@src/hooks/useGetTag';
 import PopularTag from './atoms/PopularTag';
+import { useEffect } from 'react';
 
 export default function Home() {
+  // 임의 데이터
+  const { data: tags } = useGetTag({ path: 'tags' });
+
+  useEffect(() => {
+    console.log(tags);
+  }, [tags]);
+
   return (
     <>
       <div className="home-page">
@@ -51,7 +60,7 @@ export default function Home() {
                 </a>
               </div> */}
             </div>
-            <PopularTag />
+            <PopularTag tag={tags} />
           </div>
         </div>
       </div>

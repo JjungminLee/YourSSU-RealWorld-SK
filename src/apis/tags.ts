@@ -50,7 +50,7 @@ export async function getTags<TagResponse, ResponseDto>(
 ): Promise<TagResponse> {
   try {
     const response = await axios.get<TagResponse, AxiosResponse<TagResponse, ResponseDto>, ResponseDto>(path, {
-      baseURL: `${apiUrl}/${path}`,
+      baseURL: apiUrl,
       responseType: 'json',
       ...config,
     });
