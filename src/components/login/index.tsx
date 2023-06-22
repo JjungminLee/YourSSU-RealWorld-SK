@@ -5,14 +5,14 @@ import Navbar from '../common/Navbar';
 import { postSignIn } from '@src/apis/user';
 import { ILogin } from '@src/types/user';
 import './style.css';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { userAtom } from '@src/states/UserAtom';
 import { useNavigate } from 'react-router';
 
 export default function UserLogin() {
   const [password, onChangePassword] = useInput('');
   const [email, onChangeEmail] = useInput('');
-  const [result, setResult] = useRecoilState(userAtom);
+  const setResult = useSetRecoilState(userAtom);
   const navigate = useNavigate();
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
