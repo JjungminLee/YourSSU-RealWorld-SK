@@ -1,4 +1,4 @@
-# YourSSU RealWolrd 
+# YourSSU RealWorld 
 ### Stella & Kathy
 
 ## Commit Convention
