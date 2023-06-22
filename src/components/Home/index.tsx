@@ -3,11 +3,14 @@ import PopularTag from './atoms/PopularTag';
 import { useEffect } from 'react';
 import Navbar from '../common/Navbar';
 import Footer from '../common/Footer';
+import { userAtom } from '@src/states/UserAtom';
+import { useRecoilValue } from 'recoil';
 
 export default function Home() {
   // 임의 데이터
   const { data: tags } = useGetTag({ path: 'tags' });
-
+  const userData = useRecoilValue(userAtom);
+  console.log(userData);
   useEffect(() => {
     console.log(tags);
   }, [tags]);

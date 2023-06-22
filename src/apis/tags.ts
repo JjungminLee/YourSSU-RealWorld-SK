@@ -1,7 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ApiError } from './common';
-import { ResponseDto } from '@src/types/common';
-import { TagResponse } from '../types/tag';
 
 const apiUrl = 'https://api.realworld.io/api';
 

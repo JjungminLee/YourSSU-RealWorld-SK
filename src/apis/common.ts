@@ -1,8 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-
-const apiUrl ="https://api.realworld.io/api";
-
+const apiUrl = 'https://api.realworld.io/api';
 
 /*
 [[ API 타입 & 유틸 함수 ]]
@@ -111,9 +109,9 @@ export async function postAsync<T, D>(
       responseType: 'json',
       ...config,
     });
-
     return response.data;
   } catch (error) {
+    console.log(error);
     throw processError(error, errorMessages);
   }
 }
