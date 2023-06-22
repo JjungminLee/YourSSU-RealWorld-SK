@@ -1,4 +1,4 @@
-import { ISignUp, PostSignInReq, PostSignInRes, PostSignUpReq, PostSignUpRes } from '@src/types/user';
+import { PostSignInReq, PostSignInRes, PostSignUpReq, PostSignUpRes } from '@src/types/user';
 import { postAsync } from './common';
 
 export async function postSignUp(info: PostSignUpReq) {

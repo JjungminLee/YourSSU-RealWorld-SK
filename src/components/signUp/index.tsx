@@ -6,8 +6,7 @@ import { postSignUp } from '@src/apis/user';
 import { ISignUp } from '@src/types/user';
 import { useNavigate } from 'react-router';
 
-import { UserDto } from '@src/types/user';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { userAtom } from '@src/states/UserAtom';
 
 export default function SignUp() {
@@ -15,7 +14,7 @@ export default function SignUp() {
   const [name, onChangeName] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [email, onChangeEmail] = useInput('');
-  const [result, setResult] = useRecoilState(userAtom);
+  const setResult = useSetRecoilState(userAtom);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
