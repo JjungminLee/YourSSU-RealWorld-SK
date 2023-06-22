@@ -3,7 +3,6 @@ import { StrictMode } from 'react'
 import { RecoilRoot } from 'recoil'
 import { BrowserRouter } from 'react-router-dom'
 import { Routes,Route } from 'react-router-dom'
-import Home from './components/Home.tsx'
 import UserLogin from './components/login/index.tsx'
 
 
@@ -20,9 +19,8 @@ function App() {
             <RecoilRoot>
                  <Routes> 
                   <Route path="/login" element={<UserLogin/>}></Route>
-                  <Route path="/" element={<Home/>}></Route>
+                  
                  </Routes> 
-                <Home />
             </RecoilRoot>
            </BrowserRouter> 
         </StrictMode>

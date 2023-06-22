@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-const apiUrl ="";
+const apiUrl ="https://api.realworld.io/api";
 
 /*
 [[ API 타입 & 유틸 함수 ]]
