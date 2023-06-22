@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
@@ -11,20 +10,20 @@ import { BrowserRouter, Router } from 'react-router-dom';
 import { Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
 import UserLogin from './components/login';
+import SignUp from './components/signUp';
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <>
-
       <StrictMode>
         <QueryClientProvider client={queryClient}>
-
           <RecoilRoot>
             <BrowserRouter>
               <Routes>
                 <Route path="/login" element={<UserLogin />}></Route>
+                <Route path="/signUp" element={<SignUp />}></Route>
                 <Route path="/" element={<Home />}></Route>
               </Routes>
             </BrowserRouter>
