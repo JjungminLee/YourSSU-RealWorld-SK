@@ -34,7 +34,7 @@ export default function Navbar() {
       setSignIn('');
       setSignUp('active');
     }
-  }, []);
+  }, [location.pathname]);
   return (
     <>
       <nav className="navbar navbar-light">

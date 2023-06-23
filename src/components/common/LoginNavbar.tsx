@@ -48,7 +48,7 @@ export default function LoginNavbar() {
       setSettings('');
       setProfile('active');
     }
-  }, []);
+  }, [location.pathname]);
 
   return (
     <>
