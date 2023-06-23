@@ -10,3 +10,5 @@ export async function postSignIn(info: PostSignInReq) {
   const response = await postAsync<PostSignInRes, PostSignInReq>('/users/login', info);
   return response.user;
 }
+
+export async function putUserInfo(info) {}
