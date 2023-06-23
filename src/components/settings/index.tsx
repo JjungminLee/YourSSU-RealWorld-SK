@@ -8,7 +8,6 @@ export default function Settings() {
   const userInfo = useRecoilValue(userAtom);
   return (
     <>
-      <LoginNavbar />
       <div className="settings-page">
         <div className="container page">
           <div className="row">

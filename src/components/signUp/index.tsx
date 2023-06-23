@@ -1,7 +1,6 @@
 import useInput from '../../hooks/useInput';
 import { PostSignUpReq } from '@src/types/user';
-import Navbar from '../common/Navbar';
-import Footer from '../common/Footer';
+
 import { postSignUp } from '@src/apis/user';
 import { ISignUp } from '@src/types/user';
 import { useNavigate } from 'react-router';
@@ -39,7 +38,6 @@ export default function SignUp() {
   };
   return (
     <>
-      <Navbar />
       <div className="auth-page">
         <div className="container page">
           <div className="row">
@@ -87,7 +85,6 @@ export default function SignUp() {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 }
