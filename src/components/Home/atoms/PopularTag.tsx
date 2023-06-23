@@ -7,11 +7,15 @@ export default function PopularTag({ tag }: { tag: TagResponse | undefined }) {
       <div className="sidebar">
         <p>Popular Tags</p>
         <div className="tag-list">
-          {tag?.tags.map((item: []) => (
-            <a href="" className="tag-pill tag-default" key={uuidv4()}>
-              {item}
-            </a>
-          ))}
+          {tag ? (
+            tag?.tags.map((item: []) => (
+              <a href="" className="tag-pill tag-default" key={uuidv4()}>
+                {item}
+              </a>
+            ))
+          ) : (
+            <div>Loading Tags...</div>
+          )}
         </div>
       </div>
     </div>
