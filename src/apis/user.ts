@@ -1,5 +1,5 @@
-import { GetUserRes, PostSignInReq, PostSignInRes, PostSignUpReq, PostSignUpRes } from '@src/types/user';
-import { getAsync, postAsync } from './common';
+import { PostSignInReq, PostSignInRes, PostSignUpReq, PostSignUpRes } from '@src/types/user';
+import { postAsync } from './common';
 
 export async function postSignUp(info: PostSignUpReq) {
   const response = await postAsync<PostSignUpRes, PostSignUpReq>('/users', info);

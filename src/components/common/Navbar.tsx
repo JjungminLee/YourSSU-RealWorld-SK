@@ -1,8 +1,6 @@
 import { useLocation, useNavigate } from 'react-router';
 import { useState, useEffect } from 'react';
 import './style.css';
-import { useRecoilValue } from 'recoil';
-import { userAtom } from '@src/states/UserAtom';
 
 export default function Navbar() {
   const [home, setHome] = useState<string>('');
