@@ -1,17 +1,23 @@
 import { useGetTag } from '@src/hooks/useGetTag';
 import PopularTag from './atoms/PopularTag';
 import { useEffect } from 'react';
+import Navbar from '../common/Navbar';
+import Footer from '../common/Footer';
+import { userAtom } from '@src/states/UserAtom';
+import { useRecoilValue } from 'recoil';
+import LoginNavbar from '../common/LoginNavbar';
 
 export default function Home() {
   // 임의 데이터
   const { data: tags } = useGetTag({ path: 'tags' });
-
+  const userData = useRecoilValue(userAtom);
   useEffect(() => {
     console.log(tags);
   }, [tags]);
 
   return (
     <>
+      {userData === null ? <Navbar /> : <LoginNavbar />}
       <div className="home-page">
         <div className="banner">
           <div className="container">
@@ -64,6 +70,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }
