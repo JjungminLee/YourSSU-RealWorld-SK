@@ -1,10 +1,7 @@
 import { PostSignInReq } from '@src/types/user';
 import useInput from '../../hooks/useInput';
-import Footer from '../common/Footer';
-import Navbar from '../common/Navbar';
 import { postSignIn } from '@src/apis/user';
 import { ILogin } from '@src/types/user';
-import './style.css';
 import { useSetRecoilState } from 'recoil';
 import { userAtom } from '@src/states/UserAtom';
 import { useNavigate } from 'react-router';
@@ -33,7 +30,6 @@ export default function UserLogin() {
   };
   return (
     <>
-      <Navbar />
       <div className="auth-page">
         <div className="container page">
           <div className="row">
@@ -72,7 +68,6 @@ export default function UserLogin() {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 }
