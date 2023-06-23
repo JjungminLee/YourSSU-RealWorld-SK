@@ -1,5 +1,5 @@
 import { PostSignInReq } from '@src/types/user';
-import useInput from './atom/input';
+import useInput from '../../hooks/useInput';
 import Footer from '../common/Footer';
 import Navbar from '../common/Navbar';
 import { postSignIn } from '@src/apis/user';
