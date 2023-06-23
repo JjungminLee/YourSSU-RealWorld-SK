@@ -1,5 +1,5 @@
-nav-link:hover{
-    font-weight: bold;
+.nav-item {
     cursor: pointer;
 
 }
+

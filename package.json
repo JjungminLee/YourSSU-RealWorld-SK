@@ -24,6 +24,7 @@
     "react-icons": "^4.8.0",
     "react-router-dom": "^6.13.0",
     "recoil": "^0.7.7",
+    "recoil-persist": "^4.2.0",
     "uuid": "^9.0.0",
     "v6": "^0.0.0"
   },

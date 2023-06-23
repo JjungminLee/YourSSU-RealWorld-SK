@@ -1,4 +1,4 @@
-import useInput from '../login/atom/input';
+import useInput from '../../hooks/useInput';
 import { PostSignUpReq } from '@src/types/user';
 import Navbar from '../common/Navbar';
 import Footer from '../common/Footer';
