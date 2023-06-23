@@ -10,7 +10,6 @@ export default function Navbar() {
   const [signUp, setSignUp] = useState<string>('');
   const location = useLocation();
   console.log(location.pathname);
-  const userInfo = useRecoilValue(userAtom);
 
   const navigate = useNavigate();
   const onHomeChange = () => {
