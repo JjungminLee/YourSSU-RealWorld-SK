@@ -3,15 +3,18 @@ import useInput from '../../hooks/useInput';
 import { postSignIn } from '@src/apis/user';
 import { ILogin } from '@src/types/user';
 import { useSetRecoilState } from 'recoil';
-import { userAtom } from '@src/states/UserAtom';
+import { userAtom, userPw } from '@src/states/UserAtom';
 import { useNavigate } from 'react-router';
+import { useState } from 'react';
 
 export default function UserLogin() {
   const [password, onChangePassword] = useInput('');
   const [email, onChangeEmail] = useInput('');
   const setResult = useSetRecoilState(userAtom);
+  const setPw = useSetRecoilState(userPw);
   const navigate = useNavigate();
 
+  const [message, setMessage] = useState('');
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const info: ILogin = {
@@ -23,11 +26,17 @@ export default function UserLogin() {
     };
     const response = postSignIn(req);
 
-    response.then((item) => {
-      setResult(item);
-      navigate('/');
-    });
+    response
+      .then((item) => {
+        setResult(item);
+        setPw(password);
+        navigate('/');
+      })
+      .catch((error) => {
+        console.log(error.info);
+      });
   };
+
   return (
     <>
       <div className="auth-page">
