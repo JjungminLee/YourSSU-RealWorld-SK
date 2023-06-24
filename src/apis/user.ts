@@ -1,5 +1,12 @@
-import { PostSignInReq, PostSignInRes, PostSignUpReq, PostSignUpRes } from '@src/types/user';
-import { postAsync } from './common';
+import {
+  PostSignInReq,
+  PostSignInRes,
+  PostSignUpReq,
+  PostSignUpRes,
+  PatchUserReq,
+  PatchUserRes,
+} from '@src/types/user';
+import { patchAsync, postAsync } from './common';
 
 export async function postSignUp(info: PostSignUpReq) {
   const response = await postAsync<PostSignUpRes, PostSignUpReq>('/users', info);
@@ -11,4 +18,10 @@ export async function postSignIn(info: PostSignInReq) {
   return response.user;
 }
 
-export async function putUserInfo(info) {}
+export async function patchtUserInfo(info: PatchUserReq, accessToken: string) {
+  const headers = {
+    Authorization: `Token ${accessToken}`,
+  };
+  const response = await patchAsync<PatchUserRes, PatchUserReq>('/user', info, { headers });
+  return response.user;
+}
