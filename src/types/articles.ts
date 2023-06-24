@@ -1,3 +1,7 @@
+export interface ArticleDTO<T> {
+  articles: T;
+}
+
 export type ArticleResponse = {
   articles: ArticlesResponse[];
   articlesCount: number;
@@ -22,3 +26,7 @@ export type AuthorResponse = {
   image: string;
   following: boolean;
 };
+
+export type ArticleParams = { tag?: string; author?: string; favorited?: string; limit?: number; offset?: number };
+
+// export type GetAricleRes = ArticleDTO<ArticleResponse>;
