@@ -1,63 +1,31 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { ApiError } from './common';
-import { ArticleResponse } from '@src/types/articles';
-import { ResponseDto } from '@src/types/common';
+import { ArticleParams, ArticleResponse, postFavoriteReq, postFavoriteRes } from '@src/types/articles';
+import { getAsync, postAsync } from './common';
 
-const apiUrl = 'https://api.realworld.io/api';
-
-function processError(error: unknown, errorMessages?: Record<number, string>): ApiError {
-  if (axios.isAxiosError(error)) {
-    if (error.response) {
-      // 요청 전송 성공, 서버 응답 성공, 그러나 상태 코드가 2xx 이외
-      return {
-        statusCode: error.response.status,
-        errorMessage: errorMessages?.[error.response.status] ?? '문제가 발생했어요. 다시 시도하거나 문의해 주세요.',
-        info: error.response.data,
-      };
-    }
-
-    if (error.request) {
-      // 요청 전송 성공, 그러나 서버 응답 없음
-      return {
-        statusCode: -1,
-        errorMessage: '서버와 연결하지 못했어요. 인터넷 연결 상태를 확인하고 다시 시도해 주세요.',
-        info: error.request,
-      };
-    }
-  }
-
-  // 케이스 분류 실패
-  return {
-    statusCode: -1,
-    errorMessage: '문제가 발생했어요. 다시 시도하거나 문의해 주세요.',
-    info: error,
-  };
+export async function getArticles(path: string, params?: ArticleParams, accessToken?: string) {
+  const response = await getAsync<ArticleResponse, undefined>(
+    path,
+    accessToken
+      ? {
+          headers: { Authorization: `Token ${accessToken}` },
+          params: {
+            ...params,
+          },
+        }
+      : {
+          params: {
+            ...params,
+          },
+        },
+  );
+  return response;
 }
 
-/**
- * GET 요청을 보내는 API 호출 함수
- * @param T 서버 응답 타입
- * @param D parameter 또는 body로 전달할 데이터의 타입
- *
- * @param path API Endpoint
- * @param config `AxiosRequestConfig`
- * @param errorMessages status code에 따른 에러 메시지
- */
-export async function getArticles<ArticleResponse, ResponseDto>(
-  path: string,
-  config?: AxiosRequestConfig<ResponseDto>,
-  errorMessages?: Record<number, string>,
-): Promise<ArticleResponse> {
-  try {
-    const response = await axios.get<ArticleResponse, AxiosResponse<ArticleResponse, ResponseDto>, ResponseDto>(path, {
-      baseURL: apiUrl,
-      responseType: 'json',
-      ...config,
-    });
-
-    return response.data;
-  } catch (error) {
-    // return을 쓰면 resolve가 됨
-    throw processError(error, errorMessages);
-  }
+export async function postFavorite({ accessToken, info }: { accessToken: string; info?: postFavoriteReq }) {
+  const headers = {
+    Authorization: `Token ${accessToken}`,
+  };
+  const response = await postAsync<postFavoriteRes, postFavoriteReq>(`/articles/${info?.slug}/favorite`, info, {
+    headers,
+  });
+  return response;
 }
