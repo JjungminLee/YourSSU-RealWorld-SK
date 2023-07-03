@@ -4,7 +4,8 @@ import { useQuery } from 'react-query';
 
 export const useGetArticles = ({ path, params }: { path: string; params?: ArticleParams }) => {
   // const [, setTokenExpire] = useRecoilState(tokenState);
-  return useQuery<ArticleResponse>(['getAricles'], () => getArticles(path, params), {
-    enabled: true,
+  return useQuery<ArticleResponse>(['getAricles', params], () => getArticles(path, params), {
+    // enabled: true,
+    staleTime: 60 * 1000,
   });
 };

@@ -27,6 +27,10 @@ export type AuthorResponse = {
   following: boolean;
 };
 
-export type ArticleParams = { tag?: string; author?: string; favorited?: string; limit?: number; offset?: number };
-
-// export type GetAricleRes = ArticleDTO<ArticleResponse>;
+export type ArticleParams = {
+  tag?: string;
+  author?: string;
+  favorited?: string;
+  limit?: number;
+  offset?: number;
+};
