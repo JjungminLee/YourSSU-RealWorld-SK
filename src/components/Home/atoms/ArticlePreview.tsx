@@ -9,8 +9,6 @@ export default function ArticlePreview({ data, token }: { data: ArticlesResponse
     <div className="article-preview">
       <div className="article-meta">
         <Profile authorData={data?.author} dateData={dateFormat(data?.updatedAt)} />
-        {/* 좋아요 로그인 제한 걸기 */}
-
         <LikeButton
           defaultFavorited={data?.favorited}
           favoritesCount={data?.favoritesCount}

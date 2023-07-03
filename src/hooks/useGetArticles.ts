@@ -14,6 +14,6 @@ export const useGetArticles = ({
   // const [, setTokenExpire] = useRecoilState(tokenState);
   return useQuery<ArticleResponse>(['getAricles', params, accessToken], () => getArticles(path, params, accessToken), {
     // enabled: true,
-    staleTime: 300 * 1000,
+    // staleTime: 300 * 1000,
   });
 };

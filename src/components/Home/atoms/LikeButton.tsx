@@ -1,8 +1,8 @@
+import { useDeleteFavorite } from '@src/hooks/useDeleteFavorite';
 import { usePostFavorite } from '@src/hooks/usePostFavorite';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 
-// 임의로 ? 넣어둠
 export default function LikeButton({
   favoritesCount,
   defaultFavorited,
@@ -14,22 +14,29 @@ export default function LikeButton({
   slug: string;
   token?: string;
 }) {
-  const [favorited, setFavorited] = useState<boolean>(defaultFavorited);
+  const [favorited, setFavorited] = useState<boolean | null>(defaultFavorited);
   const { mutate: postLike } = usePostFavorite();
+  const { mutate: deleteUnlike } = useDeleteFavorite();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(defaultFavorited, favoritesCount);
+  }, [defaultFavorited]);
 
   return (
     <button
       onClick={() => {
         token
-          ? (postLike({ accessToken: token, info: { slug } }),
-            setFavorited((prevState) => {
-              return !prevState;
-            }))
+          ? (!favorited
+              ? postLike({ accessToken: token, info: { slug } })
+              : deleteUnlike({ accessToken: token, params: { slug } }),
+            setFavorited(null))
           : navigate('/signup');
       }}
-      className={`btn ${favorited ? `btn-primary` : `btn-outline-primary`} btn-sm pull-xs-right`}>
+      className={`btn ${
+        favorited === null ? `disabled` : favorited ? `btn-primary` : `btn-outline-primary`
+      } btn-sm pull-xs-right`}>
       <i className="ion-heart"></i> {favoritesCount}
     </button>
   );
