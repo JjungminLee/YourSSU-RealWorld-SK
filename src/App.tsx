@@ -12,7 +12,7 @@ import Article from './components/article';
 import Settings from './components/settings';
 import Layout from './components/Layout';
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 function App() {
   return (

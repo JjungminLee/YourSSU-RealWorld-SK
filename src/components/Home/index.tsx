@@ -12,8 +12,14 @@ export default function Home() {
   const userData = useRecoilValue(userAtom);
 
   const { data: tags } = useGetTag({ path: 'tags' });
-  const { data: articles } = useGetArticles({ path: 'articles', accessToken: userData?.token });
-  const { data: myArticles } = useGetArticles({ path: 'articles', params: { author: userData?.username } });
+  const { data: articles } = useGetArticles({
+    path: 'articles',
+    accessToken: userData?.token,
+  });
+  const { data: myArticles } = useGetArticles({
+    path: 'articles',
+    params: { author: userData?.username },
+  });
 
   const [tabSelected, setTabSelected] = useState<'global' | 'your'>(userData === null ? 'global' : 'your');
 
