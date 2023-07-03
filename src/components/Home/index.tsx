@@ -12,12 +12,13 @@ export default function Home() {
   const userData = useRecoilValue(userAtom);
 
   const { data: tags } = useGetTag({ path: 'tags' });
-  const { data: articles } = useGetArticles({ path: 'articles' });
+  const { data: articles } = useGetArticles({ path: 'articles', accessToken: userData?.token });
   const { data: myArticles } = useGetArticles({ path: 'articles', params: { author: userData?.username } });
 
-  const [tabSelected, setTabSelected] = useState<String>('your');
+  const [tabSelected, setTabSelected] = useState<'global' | 'your'>(userData === null ? 'global' : 'your');
 
   useEffect(() => {
+    console.log(userData);
     console.log(tabSelected);
     console.log(myArticles);
   }, [tabSelected, myArticles]);
@@ -59,7 +60,9 @@ export default function Home() {
                   articles?.articles.length === 0 ? (
                     <div className="article-preview">No articles are here... yet.</div>
                   ) : (
-                    articles.articles.map((item) => <ArticlePreview data={item} key={uuidv4()} />)
+                    articles.articles.map((item) => (
+                      <ArticlePreview data={item} token={userData?.token} key={uuidv4()} />
+                    ))
                   )
                 ) : (
                   <div className="article-preview">Loading Articles...</div>
@@ -68,7 +71,9 @@ export default function Home() {
                 myArticles?.articles.length === 0 ? (
                   <div className="article-preview">No articles are here... yet.</div>
                 ) : (
-                  myArticles.articles.map((item) => <ArticlePreview data={item} key={uuidv4()} />)
+                  myArticles.articles.map((item) => (
+                    <ArticlePreview data={item} token={userData?.token} key={uuidv4()} />
+                  ))
                 )
               ) : (
                 <div className="article-preview">Loading Articles...</div>

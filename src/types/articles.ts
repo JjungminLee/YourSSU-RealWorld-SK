@@ -1,7 +1,3 @@
-export interface ArticleDTO<T> {
-  articles: T;
-}
-
 export type ArticleResponse = {
   articles: ArticlesResponse[];
   articlesCount: number;
@@ -33,4 +29,12 @@ export type ArticleParams = {
   favorited?: string;
   limit?: number;
   offset?: number;
+};
+
+export type postFavoriteRes = {
+  article: ArticlesResponse;
+};
+
+export type postFavoriteReq = {
+  slug: string;
 };
