@@ -35,3 +35,4 @@ export type PostSignInReq = UserDto<ILogin>;
 export type PostSignInRes = UserDto<IGetUser>;
 export type PatchUserReq = UserDto<IUserInfo>;
 export type PatchUserRes = UserDto<IGetUser>;
+export type GetUserRes = UserDto<IUserInfo>;

@@ -1,5 +1,7 @@
 import { PostSignInReq } from '@src/types/user';
 import useInput from '../../hooks/useInput';
+import Footer from '../common/Footer';
+import Navbar from '../common/Navbar';
 import { postSignIn } from '@src/apis/user';
 import { ILogin } from '@src/types/user';
 import { useSetRecoilState } from 'recoil';
@@ -14,7 +16,6 @@ export default function UserLogin() {
   const setPw = useSetRecoilState(userPw);
   const navigate = useNavigate();
 
-  const [message, setMessage] = useState('');
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const info: ILogin = {
@@ -33,7 +34,7 @@ export default function UserLogin() {
         navigate('/');
       })
       .catch((error) => {
-        console.log(error.info);
+        console.log(error);
       });
   };
 
@@ -48,9 +49,6 @@ export default function UserLogin() {
                 <a href="">Have an account?</a>
               </p>
 
-              {/* <ul className="error-messages">
-                <li>That email is already taken</li>
-                </ul> */}
               <form onSubmit={onSubmit}>
                 <fieldset className="form-group">
                   <input
@@ -77,6 +75,7 @@ export default function UserLogin() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

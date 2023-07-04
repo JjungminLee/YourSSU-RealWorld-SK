@@ -20,9 +20,12 @@ export default function Settings() {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const info: IUserInfo = { username: name, image: image, email: email, password: password, bio: bio };
+    console.log(info);
+    // todo : 이거 atom도 바꿔야함
     const req: PatchUserReq = {
       user: info,
     };
+    console.log(userInfo?.token);
     const response = patchtUserInfo(req, userInfo?.token as string);
 
     response

@@ -1,6 +1,14 @@
 import Footer from '../common/Footer';
+import useInput from '@src/hooks/useInput';
+import { useState } from 'react';
 
 export default function Editor() {
+  const [title, setTitle] = useInput('');
+  const [about, setAbout] = useInput('');
+  const [text, setText] = useInput('');
+  const [tag, setTag] = useState([]);
+
+  const onSubmit = () => {};
   return (
     <>
       <div className="editor-page">

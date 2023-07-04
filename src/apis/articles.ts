@@ -1,7 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ApiError } from './common';
-import { ArticleResponse } from '@src/types/articles';
-import { ResponseDto } from '@src/types/common';
 
 const apiUrl = 'https://api.realworld.io/api';
 
