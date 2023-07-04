@@ -1,4 +1,15 @@
+import { useRecoilValue } from 'recoil';
+import { userAtom } from '@src/states/UserAtom';
+
+import { useState } from 'react';
+import { getCurrentUser } from '@src/apis/user';
+import { IUserInfo } from '@src/types/user';
+
 export default function Profile() {
+  const [currentUser, setcurrentUser] = useState<IUserInfo>();
+  const userInfo = useRecoilValue(userAtom);
+  const currentUserRes = getCurrentUser(userInfo?.token);
+  currentUserRes.then((res) => setcurrentUser(res));
   return (
     <>
       <div className="profile-page">
@@ -6,15 +17,12 @@ export default function Profile() {
           <div className="container">
             <div className="row">
               <div className="col-xs-12 col-md-10 offset-md-1">
-                <img src="http://i.imgur.com/Qr71crq.jpg" className="user-img" />
-                <h4>Eric Simons</h4>
-                <p>
-                  Cofounder @GoThinkster, lived in Aol's HQ for a few months, kinda looks like Peeta from the Hunger
-                  Games
-                </p>
+                <img src={currentUser?.image} className="user-img" />
+                <h4>{currentUser?.username}</h4>
+                <p>{currentUser?.bio}</p>
                 <button className="btn btn-sm btn-outline-secondary action-btn">
                   <i className="ion-plus-round"></i>
-                  &nbsp; Follow Eric Simons
+                  &nbsp; {`Follow ${currentUser?.username}`}
                 </button>
               </div>
             </div>

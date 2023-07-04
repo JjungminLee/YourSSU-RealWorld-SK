@@ -5,8 +5,9 @@ import {
   PostSignUpRes,
   PatchUserReq,
   PatchUserRes,
+  GetUserRes,
 } from '@src/types/user';
-import { patchAsync, postAsync } from './common';
+import { getAsync, patchAsync, postAsync } from './common';
 
 export async function postSignUp(info: PostSignUpReq) {
   const response = await postAsync<PostSignUpRes, PostSignUpReq>('/users', info);
@@ -23,5 +24,13 @@ export async function patchtUserInfo(info: PatchUserReq, accessToken: string) {
     Authorization: `Token ${accessToken}`,
   };
   const response = await patchAsync<PatchUserRes, PatchUserReq>('/user', info, { headers });
+  return response.user;
+}
+
+export async function getCurrentUser(accessToken: string | undefined) {
+  const headers = {
+    Authorization: `Token ${accessToken}`,
+  };
+  const response = await getAsync<GetUserRes, undefined>('/user', { headers });
   return response.user;
 }

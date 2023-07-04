@@ -26,11 +26,11 @@ export interface ApiError {
  * @param error 처리할 에러
  * @param getErrorMessage status code에 따라 에러 메시지를 결정하는 함수
  */
-function processError(error: unknown, errorMessages?: Record<number, string>): ApiError {
+function processError(error: any, errorMessages?: Record<number, string>): ApiError {
   return {
     statusCode: -1,
     errorMessage: '문제가 발생했어요. 다시 시도하거나 문의해 주세요.',
-    info: error,
+    info: error.response.data.errors,
   };
 }
 
