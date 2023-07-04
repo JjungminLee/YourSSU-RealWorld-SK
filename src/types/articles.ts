@@ -22,3 +22,19 @@ export type AuthorResponse = {
   image: string;
   following: boolean;
 };
+
+export type ArticleParams = {
+  tag?: string;
+  author?: string;
+  favorited?: string;
+  limit?: number;
+  offset?: number;
+};
+
+export type postFavoriteRes = {
+  article: ArticlesResponse;
+};
+
+export type postFavoriteReq = {
+  slug: string;
+};
