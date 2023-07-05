@@ -15,14 +15,15 @@ export default function LikeButton({
   token?: string;
 }) {
   const [favorited, setFavorited] = useState<boolean | null>(defaultFavorited);
-  const { mutate: postLike } = usePostFavorite();
+
+  const { mutate: postLike, status } = usePostFavorite();
   const { mutate: deleteUnlike } = useDeleteFavorite();
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log(defaultFavorited, favoritesCount);
-  }, [defaultFavorited]);
+  // useEffect(() => {
+  //   console.log(status);
+  // }, [status]);
 
   return (
     <button

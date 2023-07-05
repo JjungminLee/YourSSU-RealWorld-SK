@@ -6,14 +6,17 @@ export const useGetArticles = ({
   path,
   params,
   accessToken,
+  mode,
 }: {
   path: string;
   params?: ArticleParams;
   accessToken?: string;
+  mode?: 'global' | 'your';
 }) => {
-  // const [, setTokenExpire] = useRecoilState(tokenState);
   return useQuery<ArticleResponse>(['getAricles', params, accessToken], () => getArticles(path, params, accessToken), {
-    // enabled: true,
-    // staleTime: 300 * 1000,
+    staleTime: 300 * 1000,
+    notifyOnChangeProps: 'tracked',
+    // cacheTime: 0,
+    // keepPreviousData: true,
   });
 };

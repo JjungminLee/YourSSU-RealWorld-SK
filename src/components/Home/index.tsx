@@ -1,7 +1,7 @@
 import React from 'react';
 import { useGetTag } from '../../hooks/useGetTag';
 import PopularTag from './atoms/PopularTag';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ArticlePreview from './atoms/ArticlePreview';
 import { useGetArticles } from '../../hooks/useGetArticles';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,22 +13,35 @@ export default function Home() {
   const userData = useRecoilValue(userAtom);
 
   const { data: tags } = useGetTag({ path: 'tags' });
-  const { data: articles } = useGetArticles({
+  const { data: articles, status } = useGetArticles({
     path: 'articles',
     accessToken: userData?.token,
+    mode: 'global',
   });
   const { data: myArticles } = useGetArticles({
     path: 'articles',
     params: { author: userData?.username },
+    mode: 'your',
   });
 
-  const [tabSelected, setTabSelected] = useState<'global' | 'your'>(userData === null ? 'global' : 'your');
+  // const updatedArticles = useMemo(() => {
+  //   // console.log(articles?.articles[3].favorited);
+  //   return articles;
+  // }, [articles]);
 
   useEffect(() => {
-    console.log(userData);
-    console.log(tabSelected);
+    console.log(articles);
+  }, [articles]);
+
+  useEffect(() => {
     console.log(myArticles);
-  }, [tabSelected, myArticles]);
+  }, [myArticles]);
+
+  // useEffect(() => {
+  //   console.log(isStale);
+  // }, [isStale]);
+
+  const [tabSelected, setTabSelected] = useState<'global' | 'your'>(userData === null ? 'global' : 'your');
 
   return (
     <>
