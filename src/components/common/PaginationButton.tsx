@@ -1,5 +1,5 @@
 import { useRecoilState } from 'recoil';
-import { pageState } from '@src/types/pageState';
+import { pageState } from '@src/states/pageState';
 
 type ButtonProps = {
   btn: string;
