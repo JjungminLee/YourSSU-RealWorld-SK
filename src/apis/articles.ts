@@ -1,5 +1,6 @@
 import { ArticleParams, ArticleResponse, postFavoriteReq, postFavoriteRes } from '.././types/articles';
 import { deleteAsync, getAsync, postAsync } from './common';
+import { PostArticleReq, PostArticleRes } from '.././types/articles';
 
 export async function getArticles(path: string, params?: ArticleParams, accessToken?: string) {
   const response = await getAsync<ArticleResponse, undefined>(
@@ -39,4 +40,12 @@ export async function deleteFavorite({ accessToken, params }: { accessToken: str
     params: { ...params },
   });
   return response;
+}
+
+export async function postArticle(accessToken: string | undefined, info?: PostArticleReq) {
+  const headers = {
+    Authorization: `Token ${accessToken}`,
+  };
+  const response = await postAsync<PostArticleRes, PostArticleReq>('/articles', info, { headers });
+  return response.article;
 }

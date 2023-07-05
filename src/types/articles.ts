@@ -1,3 +1,7 @@
+export interface ArticleDto<T> {
+  article: T;
+}
+
 export type ArticleResponse = {
   articles: ArticlesResponse[];
   articlesCount: number;
@@ -38,3 +42,13 @@ export type postFavoriteRes = {
 export type postFavoriteReq = {
   slug: string;
 };
+
+export interface ArticleRequest {
+  title: string;
+  description: string;
+  body: string;
+  tagList: string[];
+}
+
+export type PostArticleReq = ArticleDto<ArticleRequest>;
+export type PostArticleRes = ArticleDto<ArticleResponse>;

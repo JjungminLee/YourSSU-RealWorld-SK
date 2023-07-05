@@ -2,11 +2,12 @@ import React from 'react';
 import { ILogin, PostSignInReq } from '../../types/user';
 import useInput from '../../hooks/useInput';
 import Footer from '../common/Footer';
+
 import { useSetRecoilState } from 'recoil';
-import { useNavigate } from 'react-router';
-import { useState } from 'react';
+
 import { postSignIn } from '../../apis/user';
-import { userAtom, userPw } from '../../states/UserAtom';
+import { useNavigate } from 'react-router';
+import { userAtom, userPw } from '@src/states/UserAtom';
 
 export default function UserLogin() {
   const [password, onChangePassword] = useInput('');
@@ -18,8 +19,8 @@ export default function UserLogin() {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const info: ILogin = {
-      email: email,
-      password: password,
+      email: email as string,
+      password: password as string,
     };
     const req: PostSignInReq = {
       user: info,
@@ -30,7 +31,7 @@ export default function UserLogin() {
     response
       .then((item) => {
         setResult(item);
-        setPw(password);
+        setPw(password as string);
         navigate('/');
       })
       .catch((error) => {
