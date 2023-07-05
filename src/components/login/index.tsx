@@ -5,7 +5,7 @@ import Navbar from '../common/Navbar';
 import { postSignIn } from '@src/apis/user';
 import { ILogin } from '@src/types/user';
 import { useSetRecoilState } from 'recoil';
-import { userAtom, userPw } from '@src/states/UserAtom';
+import { userAtom } from '@src/states/UserAtom';
 import { useNavigate } from 'react-router';
 import { useState } from 'react';
 
@@ -13,7 +13,6 @@ export default function UserLogin() {
   const [password, onChangePassword] = useInput('');
   const [email, onChangeEmail] = useInput('');
   const setResult = useSetRecoilState(userAtom);
-  const setPw = useSetRecoilState(userPw);
   const navigate = useNavigate();
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -30,7 +29,6 @@ export default function UserLogin() {
     response
       .then((item) => {
         setResult(item);
-        setPw(password);
         navigate('/');
       })
       .catch((error) => {
