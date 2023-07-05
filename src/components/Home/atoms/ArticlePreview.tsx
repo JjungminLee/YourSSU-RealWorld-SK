@@ -3,6 +3,7 @@ import Profile from './Profile';
 import { v4 as uuidv4 } from 'uuid';
 import { dateFormat } from '@src/utils/dateFormat';
 import LikeButton from './LikeButton';
+import { useMemo } from 'react';
 
 export default function ArticlePreview({ data, token }: { data: ArticlesResponse; token?: string }) {
   return (
