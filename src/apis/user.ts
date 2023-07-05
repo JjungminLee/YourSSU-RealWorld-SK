@@ -6,7 +6,7 @@ import {
   PatchUserReq,
   PatchUserRes,
   GetUserRes,
-} from '@src/types/user';
+} from '.././types/user';
 import { getAsync, patchAsync, postAsync } from './common';
 
 export async function postSignUp(info: PostSignUpReq) {
@@ -16,7 +16,7 @@ export async function postSignUp(info: PostSignUpReq) {
 
 export async function postSignIn(info: PostSignInReq) {
   const response = await postAsync<PostSignInRes, PostSignInReq>('/users/login', info);
-  return response.user;
+  return await response.user;
 }
 
 export async function patchtUserInfo(info: PatchUserReq, accessToken: string) {

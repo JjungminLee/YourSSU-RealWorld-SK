@@ -1,5 +1,6 @@
+import React from 'react';
 import Footer from '../common/Footer';
-import useInput from '@src/hooks/useInput';
+import useInput from '../../hooks/useInput';
 import { useState } from 'react';
 
 export default function Editor() {

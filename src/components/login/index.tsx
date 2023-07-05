@@ -1,13 +1,12 @@
-import { PostSignInReq } from '@src/types/user';
+import React from 'react';
+import { ILogin, PostSignInReq } from '../../types/user';
 import useInput from '../../hooks/useInput';
 import Footer from '../common/Footer';
-import Navbar from '../common/Navbar';
-import { postSignIn } from '@src/apis/user';
-import { ILogin } from '@src/types/user';
 import { useSetRecoilState } from 'recoil';
-import { userAtom, userPw } from '@src/states/UserAtom';
 import { useNavigate } from 'react-router';
 import { useState } from 'react';
+import { postSignIn } from '../../apis/user';
+import { userAtom, userPw } from '../../states/UserAtom';
 
 export default function UserLogin() {
   const [password, onChangePassword] = useInput('');
@@ -26,6 +25,7 @@ export default function UserLogin() {
       user: info,
     };
     const response = postSignIn(req);
+    console.log(response);
 
     response
       .then((item) => {
