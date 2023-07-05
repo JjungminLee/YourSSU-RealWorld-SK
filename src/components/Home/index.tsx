@@ -103,7 +103,13 @@ export default function Home() {
             </div>
             <PopularTag tag={tags} />
           </div>
-          <Pagination limit={20}></Pagination>
+          {tabSelected == 'global'
+            ? articles?.articlesCount !== undefined && (
+                <Pagination limit={Math.ceil(articles?.articlesCount / 10)}></Pagination>
+              )
+            : myArticles?.articlesCount !== undefined && (
+                <Pagination limit={Math.ceil(myArticles?.articlesCount / 10)}></Pagination>
+              )}
         </div>
       </div>
     </>
