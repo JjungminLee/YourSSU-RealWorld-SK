@@ -12,7 +12,6 @@ export default function Footer() {
           </span>
         </div>
       </footer>
-      ;
     </>
   );
 }

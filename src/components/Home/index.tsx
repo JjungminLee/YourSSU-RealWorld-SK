@@ -7,21 +7,23 @@ import { useGetArticles } from '../../hooks/useGetArticles';
 import { v4 as uuidv4 } from 'uuid';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from '../../states/UserAtom';
+import Pagination from '../common/Pagination';
+import { pageState } from '@src/types/pageState';
 
 export default function Home() {
   // 임의 데이터
   const userData = useRecoilValue(userAtom);
+  const page = useRecoilValue(pageState);
 
   const { data: tags } = useGetTag({ path: 'tags' });
-  const { data: articles, status } = useGetArticles({
+  const { data: articles } = useGetArticles({
     path: 'articles',
     accessToken: userData?.token,
-    mode: 'global',
+    params: { offset: page * 10 },
   });
   const { data: myArticles } = useGetArticles({
     path: 'articles',
     params: { author: userData?.username },
-    mode: 'your',
   });
 
   // const updatedArticles = useMemo(() => {
@@ -101,6 +103,13 @@ export default function Home() {
             </div>
             <PopularTag tag={tags} />
           </div>
+          {tabSelected == 'global'
+            ? articles?.articlesCount !== undefined && (
+                <Pagination limit={Math.ceil(articles?.articlesCount / 10)}></Pagination>
+              )
+            : myArticles?.articlesCount !== undefined && (
+                <Pagination limit={Math.ceil(myArticles?.articlesCount / 10)}></Pagination>
+              )}
         </div>
       </div>
     </>
