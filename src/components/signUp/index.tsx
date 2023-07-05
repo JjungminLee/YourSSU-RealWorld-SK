@@ -1,6 +1,6 @@
 import useInput from '../../hooks/useInput';
 import { PostSignUpReq } from '@src/types/user';
-
+import { useState } from 'react';
 import { postSignUp } from '@src/apis/user';
 import { ISignUp } from '@src/types/user';
 import { useNavigate } from 'react-router';
@@ -15,6 +15,7 @@ export default function SignUp() {
   const [email, onChangeEmail] = useInput('');
   const setPw = useSetRecoilState(userPw);
   const setResult = useSetRecoilState(userAtom);
+  const [message, setMessage] = useState('');
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -27,14 +28,18 @@ export default function SignUp() {
       user: info,
     };
     const response = postSignUp(req);
+    console.log(response);
     response
       .then((item) => {
         setResult(item);
         setPw(password);
-        navigate('/');
       })
-      .catch((error) => console.log(error));
-    navigate('/');
+      .catch((error) => {
+        console.log(error);
+        setMessage(error.info);
+        console.log(message);
+        //window.location.replace('/signup');
+      });
   };
   return (
     <>
@@ -47,9 +52,11 @@ export default function SignUp() {
                 <a href="">Have an account?</a>
               </p>
 
-              {/* <ul className="error-messages">
-                  <li>That email is already taken</li>
-                  </ul> */}
+              {message === '' ? null : (
+                <ul className="error-messages">
+                  <li>{message}</li>
+                </ul>
+              )}
               <form onSubmit={onSubmit}>
                 <fieldset className="form-group">
                   <input

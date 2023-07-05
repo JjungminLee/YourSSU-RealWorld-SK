@@ -1,11 +1,12 @@
-import { useGetTag } from '@src/hooks/useGetTag';
+import React from 'react';
+import { useGetTag } from '../../hooks/useGetTag';
 import PopularTag from './atoms/PopularTag';
 import { useEffect, useState } from 'react';
 import ArticlePreview from './atoms/ArticlePreview';
-import { useGetArticles } from '@src/hooks/useGetArticles';
+import { useGetArticles } from '../../hooks/useGetArticles';
 import { v4 as uuidv4 } from 'uuid';
 import { useRecoilValue } from 'recoil';
-import { userAtom } from '@src/states/UserAtom';
+import { userAtom } from '../../states/UserAtom';
 
 export default function Home() {
   // 임의 데이터

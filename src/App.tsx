@@ -1,3 +1,4 @@
+import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { StrictMode } from 'react';
 import { RecoilRoot } from 'recoil';
@@ -8,7 +9,6 @@ import UserLogin from './components/login';
 import SignUp from './components/signUp';
 import Profile from './components/profile';
 import Editor from './components/editor';
-import Article from './components/article';
 import Settings from './components/settings';
 import Layout from './components/Layout';
 
@@ -29,7 +29,6 @@ function App() {
                   <Route path="profile/:username" element={<Profile />}></Route>
                   <Route path="settings" element={<Settings />}></Route>
                   <Route path="editor" element={<Editor />}></Route>
-                  <Route path="article/:title" element={<Article />}></Route>
                 </Route>
               </Routes>
             </BrowserRouter>

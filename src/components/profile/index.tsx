@@ -1,4 +1,60 @@
+import { useRecoilValue } from 'recoil';
+import { userAtom } from '@src/states/UserAtom';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { deleteFollowUser, getCurrentUser, getUserProfile, postFollowUser } from '@src/apis/user';
+import { IUserInfo } from '@src/types/user';
+import { useQuery } from 'react-query';
+import { getUserArticle } from '@src/apis/articles';
+import MyArticleItem from './myArticleItem';
+import { useGetArticles } from '@src/hooks/useGetArticles';
+import { useNavigate } from 'react-router';
+
 export default function Profile() {
+  const accessToken = useRecoilValue(userAtom)?.token;
+  const navigate = useNavigate();
+  const user: string = location.pathname.substring(9);
+  const [currentUser, setcurrentUser] = useState<IUserInfo>();
+  const userInfo = useRecoilValue(userAtom);
+  const [tab, setTab] = useState<string>('MyArticle');
+  const [articleActive, setArticleActive] = useState('active');
+  const [favoriteActvie, setFavoriteActive] = useState('');
+
+  useEffect(() => {
+    const currentUserRes = getCurrentUser(userInfo?.token);
+    currentUserRes.then((res) => setcurrentUser(res));
+  }, []);
+
+  const onClickFollowBtn = () => {
+    postFollowUser(accessToken as string, user);
+    location.reload();
+  };
+  const onClickUnfollowBtn = () => {
+    deleteFollowUser(accessToken as string, user);
+    location.reload();
+  };
+  const onClickSettingBtn = () => {
+    navigate('/settings');
+  };
+  const onArticleClick = () => {
+    setTab('MyArticle');
+    setArticleActive('active');
+    setFavoriteActive('');
+  };
+  const onFavoriteClick = () => {
+    setTab('Favorite');
+    setArticleActive('');
+    setFavoriteActive('active');
+  };
+
+  const { data: myArticleList } = useQuery(['myArticles', user as string, accessToken as string], () =>
+    getUserArticle(user as string, accessToken as string),
+  );
+
+  const { data: userProfile } = useQuery(['userProfile', accessToken as string, user as string], () =>
+    getUserProfile(accessToken as string, user as string),
+  );
+
   return (
     <>
       <div className="profile-page">
@@ -6,16 +62,25 @@ export default function Profile() {
           <div className="container">
             <div className="row">
               <div className="col-xs-12 col-md-10 offset-md-1">
-                <img src="http://i.imgur.com/Qr71crq.jpg" className="user-img" />
-                <h4>Eric Simons</h4>
-                <p>
-                  Cofounder @GoThinkster, lived in Aol's HQ for a few months, kinda looks like Peeta from the Hunger
-                  Games
-                </p>
-                <button className="btn btn-sm btn-outline-secondary action-btn">
-                  <i className="ion-plus-round"></i>
-                  &nbsp; Follow Eric Simons
-                </button>
+                <img src={userProfile?.image} className="user-img" />
+                <h4>{userProfile?.username}</h4>
+                <p>{userProfile?.bio}</p>
+                {user === currentUser?.username ? (
+                  <button className="btn btn-sm btn-outline-secondary action-btn" onClick={onClickSettingBtn}>
+                    <i className="ion-gear-a"></i>
+                    &nbsp; {`Edit Profile Settings`}
+                  </button>
+                ) : userProfile?.following ? (
+                  <button className="btn btn-sm btn-outline-secondary action-btn" onClick={onClickUnfollowBtn}>
+                    <i className="ion-plus-round"></i>
+                    &nbsp; {`Unfollow ${userProfile?.username}`}
+                  </button>
+                ) : (
+                  <button className="btn btn-sm btn-outline-secondary action-btn" onClick={onClickFollowBtn}>
+                    <i className="ion-plus-round"></i>
+                    &nbsp; {`Follow ${userProfile?.username}`}
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -27,65 +92,28 @@ export default function Profile() {
               <div className="articles-toggle">
                 <ul className="nav nav-pills outline-active">
                   <li className="nav-item">
-                    <a className="nav-link active" href="">
+                    <div className={`nav-link ${articleActive}`} onClick={onArticleClick}>
                       My Articles
-                    </a>
+                    </div>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" href="">
+                    <div className={`nav-link ${favoriteActvie}`} onClick={onFavoriteClick}>
                       Favorited Articles
-                    </a>
+                    </div>
                   </li>
                 </ul>
               </div>
 
-              <div className="article-preview">
-                <div className="article-meta">
-                  <a href="">
-                    <img src="http://i.imgur.com/Qr71crq.jpg" />
-                  </a>
-                  <div className="info">
-                    <a href="" className="author">
-                      Eric Simons
-                    </a>
-                    <span className="date">January 20th</span>
-                  </div>
-                  <button className="btn btn-outline-primary btn-sm pull-xs-right">
-                    <i className="ion-heart"></i> 29
-                  </button>
-                </div>
-                <a href="" className="preview-link">
-                  <h1>How to build webapps that scale</h1>
-                  <p>This is the description for the post.</p>
-                  <span>Read more...</span>
-                </a>
-              </div>
-
-              <div className="article-preview">
-                <div className="article-meta">
-                  <a href="">
-                    <img src="http://i.imgur.com/N4VcUeJ.jpg" />
-                  </a>
-                  <div className="info">
-                    <a href="" className="author">
-                      Albert Pai
-                    </a>
-                    <span className="date">January 20th</span>
-                  </div>
-                  <button className="btn btn-outline-primary btn-sm pull-xs-right">
-                    <i className="ion-heart"></i> 32
-                  </button>
-                </div>
-                <a href="" className="preview-link">
-                  <h1>The song you won't ever stop singing. No matter how hard you try.</h1>
-                  <p>This is the description for the post.</p>
-                  <span>Read more...</span>
-                  <ul className="tag-list">
-                    <li className="tag-default tag-pill tag-outline">Music</li>
-                    <li className="tag-default tag-pill tag-outline">Song</li>
-                  </ul>
-                </a>
-              </div>
+              {tab === 'MyArticle'
+                ? myArticleList?.map((item) => (
+                    <MyArticleItem
+                      author={item.author.username}
+                      date={item.createdAt}
+                      title={item.title}
+                      subTitle={item.description}
+                    />
+                  ))
+                : null}
             </div>
           </div>
         </div>

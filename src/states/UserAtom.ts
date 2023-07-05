@@ -1,4 +1,4 @@
-import { IGetUser } from '@src/types/user';
+import { IGetUser } from '.././types/user';
 import { atom } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
 

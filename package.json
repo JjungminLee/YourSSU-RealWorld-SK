@@ -17,6 +17,7 @@
     "@types/react-query": "^1.2.9",
     "@types/uuid": "^9.0.2",
     "axios": "^1.4.0",
+    "crypto-js": "^4.1.1",
     "node-sass": "^9.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@emotion/babel-plugin": "^11.11.0",
+    "@types/crypto-js": "^4.1.1",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
     "@types/react-router": "^5.1.20",
