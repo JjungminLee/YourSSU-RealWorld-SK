@@ -1,6 +1,6 @@
 import { useGetTag } from '@src/hooks/useGetTag';
 import PopularTag from './atoms/PopularTag';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ArticlePreview from './atoms/ArticlePreview';
 import { useGetArticles } from '@src/hooks/useGetArticles';
 import { v4 as uuidv4 } from 'uuid';
