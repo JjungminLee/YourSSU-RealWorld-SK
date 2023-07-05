@@ -8,6 +8,7 @@ import { useSetRecoilState } from 'recoil';
 import { postSignIn } from '../../apis/user';
 import { useNavigate } from 'react-router';
 import { userAtom, userPw } from '@src/states/UserAtom';
+import cryptoJs from 'crypto-js';
 
 export default function UserLogin() {
   const [password, onChangePassword] = useInput('');
@@ -31,7 +32,7 @@ export default function UserLogin() {
     response
       .then((item) => {
         setResult(item);
-        setPw(password as string);
+        setPw(password);
         navigate('/');
       })
       .catch((error) => {

@@ -50,5 +50,11 @@ export interface ArticleRequest {
   tagList: string[];
 }
 
+export interface IArticleList {
+  articles: ArticlesResponse[];
+  articleCount: number;
+}
+
 export type PostArticleReq = ArticleDto<ArticleRequest>;
 export type PostArticleRes = ArticleDto<ArticleResponse>;
+export type GetArticleListRes = IArticleList;

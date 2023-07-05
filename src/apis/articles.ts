@@ -1,4 +1,10 @@
-import { ArticleParams, ArticleResponse, postFavoriteReq, postFavoriteRes } from '.././types/articles';
+import {
+  ArticleParams,
+  ArticleResponse,
+  GetArticleListRes,
+  postFavoriteReq,
+  postFavoriteRes,
+} from '.././types/articles';
 import { deleteAsync, getAsync, postAsync } from './common';
 import { PostArticleReq, PostArticleRes } from '.././types/articles';
 
@@ -49,3 +55,8 @@ export async function postArticle(accessToken: string | undefined, info?: PostAr
   const response = await postAsync<PostArticleRes, PostArticleReq>('/articles', info, { headers });
   return response.article;
 }
+
+export const getUserArticle = async () => {
+  const response = await getAsync<GetArticleListRes, undefined>('/articles');
+  return response.articles;
+};

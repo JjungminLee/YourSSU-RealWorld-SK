@@ -5,6 +5,7 @@ import useInput from '@src/hooks/useInput';
 import { useNavigate } from 'react-router';
 import { IUserInfo, PatchUserReq } from '@src/types/user';
 import { patchtUserInfo } from '@src/apis/user';
+import { useState } from 'react';
 
 export default function Settings() {
   const userInfo = useRecoilValue(userAtom);
@@ -13,9 +14,13 @@ export default function Settings() {
 
   const [name, setName] = useInput(userInfo?.username as string);
   const [image, setImage] = useInput(userInfo?.image as string);
-  const [bio, setBio] = useInput('');
+  const [bio, setBio] = useState('');
   const [email, setEmail] = useInput(userInfo?.email as string);
   const [password, setPassword] = useInput(pw);
+
+  const onHandleBio = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setBio(e.target.value);
+  };
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -76,7 +81,7 @@ export default function Settings() {
                       rows={8}
                       placeholder="Short bio about you"
                       value={bio}
-                      onChange={setBio}
+                      onChange={onHandleBio}
                     />
                   </fieldset>
                   <fieldset className="form-group">

@@ -11,13 +11,12 @@ const apiUrl = 'https://api.realworld.io/api';
  * @param T info의 타입
  */
 export class ApiError extends Error {
-  statusCode: number;
+  error: any;
   errorMessage: string;
   info?: any;
 
-  constructor(statusCode: number, errorMessage: string, info?: any) {
+  constructor(error: any, errorMessage: string, info?: any) {
     super(errorMessage);
-    this.statusCode = statusCode;
     this.errorMessage = errorMessage;
     this.info = info;
   }
@@ -63,8 +62,7 @@ export async function getAsync<T, D>(
     });
 
     return response.data;
-  } catch (error) {
-    // return을 쓰면 resolve가 됨
+  } catch (error: unknown) {
     throw processError(error, errorMessages);
   }
 }

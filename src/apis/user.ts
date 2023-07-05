@@ -6,6 +6,8 @@ import {
   PatchUserReq,
   PatchUserRes,
   GetUserRes,
+  IUserInfo,
+  PostFollowRes,
 } from '.././types/user';
 import { getAsync, patchAsync, postAsync } from './common';
 
@@ -16,7 +18,7 @@ export async function postSignUp(info: PostSignUpReq) {
 
 export async function postSignIn(info: PostSignInReq) {
   const response = await postAsync<PostSignInRes, PostSignInReq>('/users/login', info);
-  return await response.user;
+  return response.user;
 }
 
 export async function patchtUserInfo(info: PatchUserReq, accessToken: string) {
@@ -33,4 +35,13 @@ export async function getCurrentUser(accessToken: string | undefined) {
   };
   const response = await getAsync<GetUserRes, undefined>('/user', { headers });
   return response.user;
+}
+
+export async function postFollowUser(accessToken: string, username: string) {
+  const info = {};
+  const headers = {
+    Authorization: `Token ${accessToken}`,
+  };
+  const response = await postAsync<PostFollowRes, {}>(`/profiles/${username}/follow`, info, { headers });
+  return response.profile;
 }
