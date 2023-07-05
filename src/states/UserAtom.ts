@@ -9,9 +9,3 @@ export const userAtom = atom<IGetUser | null>({
   default: null,
   effects_UNSTABLE: [persistAtom],
 });
-
-export const userPw = atom<string>({
-  key: 'userPw',
-  default: '',
-  effects_UNSTABLE: [persistAtom],
-});

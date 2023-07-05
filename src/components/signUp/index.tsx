@@ -6,14 +6,13 @@ import { ISignUp } from '@src/types/user';
 import { useNavigate } from 'react-router';
 
 import { useSetRecoilState } from 'recoil';
-import { userAtom, userPw } from '@src/states/UserAtom';
+import { userAtom } from '@src/states/UserAtom';
 
 export default function SignUp() {
   const navigate = useNavigate();
   const [name, onChangeName] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [email, onChangeEmail] = useInput('');
-  const setPw = useSetRecoilState(userPw);
   const setResult = useSetRecoilState(userAtom);
   const [message, setMessage] = useState('');
 
@@ -32,7 +31,6 @@ export default function SignUp() {
     response
       .then((item) => {
         setResult(item);
-        setPw(password);
       })
       .catch((error) => {
         console.log(error);
