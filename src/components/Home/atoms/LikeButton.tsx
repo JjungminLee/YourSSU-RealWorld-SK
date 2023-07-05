@@ -21,10 +21,6 @@ export default function LikeButton({
 
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   console.log(status);
-  // }, [status]);
-
   return (
     <button
       onClick={() => {
