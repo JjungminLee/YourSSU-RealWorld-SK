@@ -1,3 +1,3 @@
 import { atom } from 'recoil';
 
-export const tagState = atom<string>({ key: 'pageState', default: '' });
+export const tagState = atom<string>({ key: 'tagState', default: '' });
