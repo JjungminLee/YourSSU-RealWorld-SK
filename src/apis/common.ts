@@ -10,10 +10,17 @@ const apiUrl = 'https://api.realworld.io/api';
  * API 호출 함수에서 발생하는 에러 타입
  * @param T info의 타입
  */
-export interface ApiError {
+export class ApiError extends Error {
   statusCode: number;
   errorMessage: string;
   info?: any;
+
+  constructor(statusCode: number, errorMessage: string, info?: any) {
+    super(errorMessage);
+    this.statusCode = statusCode;
+    this.errorMessage = errorMessage;
+    this.info = info;
+  }
 }
 
 /**
@@ -27,11 +34,7 @@ export interface ApiError {
  * @param getErrorMessage status code에 따라 에러 메시지를 결정하는 함수
  */
 function processError(error: any, errorMessages?: Record<number, string>): ApiError {
-  return {
-    statusCode: -1,
-    errorMessage: '문제가 발생했어요. 다시 시도하거나 문의해 주세요.',
-    info: error.response.data.errors,
-  };
+  return new ApiError(-1, '문제가 발생했어요. 다시 시도하거나 문의해 주세요.', error.response.data.errors);
 }
 
 /*
