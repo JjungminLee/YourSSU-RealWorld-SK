@@ -5,15 +5,17 @@ import { useEffect, useState } from 'react';
 import ArticlePreview from './atoms/ArticlePreview';
 import { useGetArticles } from '../../hooks/useGetArticles';
 import { v4 as uuidv4 } from 'uuid';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { userAtom } from '../../states/UserAtom';
 import Pagination from '../common/Pagination';
-import { pageState } from '@src/types/pageState';
+import { pageState } from '@src/states/pageState';
+import { tagState } from '@src/states/tagState';
 
 export default function Home() {
   // 임의 데이터
   const userData = useRecoilValue(userAtom);
   const page = useRecoilValue(pageState);
+  const [selectedTag, setSelectedTag] = useRecoilState(tagState);
 
   const { data: tags } = useGetTag({ path: 'tags' });
   const { data: articles } = useGetArticles({
@@ -25,23 +27,10 @@ export default function Home() {
     path: 'articles',
     params: { author: userData?.username },
   });
-
-  // const updatedArticles = useMemo(() => {
-  //   // console.log(articles?.articles[3].favorited);
-  //   return articles;
-  // }, [articles]);
-
-  useEffect(() => {
-    console.log(articles);
-  }, [articles]);
-
-  useEffect(() => {
-    console.log(myArticles);
-  }, [myArticles]);
-
-  // useEffect(() => {
-  //   console.log(isStale);
-  // }, [isStale]);
+  const { data: tagArticles } = useGetArticles({
+    path: 'articles',
+    params: { tag: selectedTag },
+  });
 
   const [tabSelected, setTabSelected] = useState<'global' | 'your'>(userData === null ? 'global' : 'your');
 
@@ -63,47 +52,74 @@ export default function Home() {
                     <li
                       className="nav-item"
                       onClick={() => {
+                        setSelectedTag('');
                         if (tabSelected != 'your') setTabSelected('your');
                       }}>
-                      <a className={`nav-link ${tabSelected == 'your' ? `active` : `disabled`}`}>Your Feed</a>
+                      <a className={`nav-link ${tabSelected == 'your' && selectedTag == '' ? `active` : `disabled`}`}>
+                        Your Feed
+                      </a>
                     </li>
                   )}
                   <li
                     className="nav-item"
                     onClick={() => {
+                      setSelectedTag('');
                       if (tabSelected != 'global') setTabSelected('global');
                     }}>
-                    <a className={`nav-link ${tabSelected == 'global' ? `active` : `disabled`}`}>Global Feed</a>
+                    <a className={`nav-link ${tabSelected == 'global' && selectedTag == '' ? `active` : `disabled`}`}>
+                      Global Feed
+                    </a>
                   </li>
+                  {selectedTag !== '' && (
+                    <li className="nav-item">
+                      <a className={`nav-link active ng-binding`}>
+                        <i className="ion-pound"></i>
+                        {` ${selectedTag}`}
+                      </a>
+                    </li>
+                  )}
                 </ul>
               </div>
-              {tabSelected == 'global' ? (
-                articles ? (
-                  articles?.articles.length === 0 ? (
+              {selectedTag == '' &&
+                (tabSelected == 'global' ? (
+                  articles ? (
+                    articles?.articles.length === 0 ? (
+                      <div className="article-preview">No articles are here... yet.</div>
+                    ) : (
+                      articles.articles.map((item) => (
+                        <ArticlePreview data={item} token={userData?.token} key={uuidv4()} />
+                      ))
+                    )
+                  ) : (
+                    <div className="article-preview">Loading Articles...</div>
+                  )
+                ) : myArticles ? (
+                  myArticles?.articles.length === 0 ? (
                     <div className="article-preview">No articles are here... yet.</div>
                   ) : (
-                    articles.articles.map((item) => (
+                    myArticles.articles.map((item) => (
                       <ArticlePreview data={item} token={userData?.token} key={uuidv4()} />
                     ))
                   )
                 ) : (
                   <div className="article-preview">Loading Articles...</div>
-                )
-              ) : myArticles ? (
-                myArticles?.articles.length === 0 ? (
-                  <div className="article-preview">No articles are here... yet.</div>
+                ))}
+              {selectedTag !== '' &&
+                (tagArticles ? (
+                  tagArticles?.articles.length === 0 ? (
+                    <div className="article-preview">No articles are here... yet.</div>
+                  ) : (
+                    tagArticles.articles.map((item) => (
+                      <ArticlePreview data={item} token={userData?.token} key={uuidv4()} />
+                    ))
+                  )
                 ) : (
-                  myArticles.articles.map((item) => (
-                    <ArticlePreview data={item} token={userData?.token} key={uuidv4()} />
-                  ))
-                )
-              ) : (
-                <div className="article-preview">Loading Articles...</div>
-              )}
+                  <div className="article-preview">Loading Articles...</div>
+                ))}
             </div>
             <PopularTag tag={tags} />
           </div>
-          {tabSelected == 'global'
+          {tabSelected == 'global' && selectedTag == ''
             ? articles?.articlesCount !== undefined && (
                 <Pagination limit={Math.ceil(articles?.articlesCount / 10)}></Pagination>
               )
