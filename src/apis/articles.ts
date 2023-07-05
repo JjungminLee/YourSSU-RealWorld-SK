@@ -56,7 +56,10 @@ export async function postArticle(accessToken: string | undefined, info?: PostAr
   return response.article;
 }
 
-export const getUserArticle = async () => {
-  const response = await getAsync<GetArticleListRes, undefined>('/articles');
+export const getUserArticle = async (username: string, accessToken: string) => {
+  const headers = {
+    Authorization: `Token ${accessToken}`,
+  };
+  const response = await getAsync<GetArticleListRes, undefined>(`/articles?author=${username}`, { headers });
   return response.articles;
 };

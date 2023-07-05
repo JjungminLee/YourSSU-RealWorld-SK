@@ -17,7 +17,7 @@ export default function UserLogin() {
   const setPw = useSetRecoilState(userPw);
   const navigate = useNavigate();
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const info: ILogin = {
       email: email as string,
@@ -26,18 +26,11 @@ export default function UserLogin() {
     const req: PostSignInReq = {
       user: info,
     };
-    const response = postSignIn(req);
+    const response = await postSignIn(req);
     console.log(response);
-
-    response
-      .then((item) => {
-        setResult(item);
-        setPw(password);
-        navigate('/');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    setResult(response);
+    setPw(password);
+    navigate('/');
   };
 
   return (

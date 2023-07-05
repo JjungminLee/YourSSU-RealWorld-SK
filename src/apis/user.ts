@@ -8,8 +8,9 @@ import {
   GetUserRes,
   IUserInfo,
   PostFollowRes,
+  GetProfileRes,
 } from '.././types/user';
-import { getAsync, patchAsync, postAsync } from './common';
+import { deleteAsync, getAsync, patchAsync, postAsync } from './common';
 
 export async function postSignUp(info: PostSignUpReq) {
   const response = await postAsync<PostSignUpRes, PostSignUpReq>('/users', info);
@@ -43,5 +44,21 @@ export async function postFollowUser(accessToken: string, username: string) {
     Authorization: `Token ${accessToken}`,
   };
   const response = await postAsync<PostFollowRes, {}>(`/profiles/${username}/follow`, info, { headers });
+  return response.profile;
+}
+
+export async function deleteFollowUser(accessToken: string, username: string) {
+  const headers = {
+    Authorization: `Token ${accessToken}`,
+  };
+  const response = await deleteAsync<PostFollowRes, {}>(`/profiles/${username}/follow`, { headers });
+  return response.profile;
+}
+
+export async function getUserProfile(accessToken: string, username: string) {
+  const headers = {
+    Authorization: `Token ${accessToken}`,
+  };
+  const response = await getAsync<GetProfileRes, {}>(`/profiles/${username}`, { headers });
   return response.profile;
 }

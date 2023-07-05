@@ -3,7 +3,7 @@ import { AuthorResponse } from '@src/types/articles';
 export default function Profile({ authorData, dateData }: { authorData: AuthorResponse; dateData: string }) {
   return (
     <>
-      <a href="profile.html">
+      <a href={`/profile/${authorData.username}`}>
         <img src={authorData?.image} />
       </a>
       <div className="info">

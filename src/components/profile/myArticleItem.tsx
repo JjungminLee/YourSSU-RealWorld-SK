@@ -14,7 +14,7 @@ export default function MyArticleItem({ author, date, title, subTitle }: IMyArti
             <img src="http://i.imgur.com/Qr71crq.jpg" />
           </a>
           <div className="info">
-            <a href="" className="author">
+            <a href={`/profile/${author}`} className="author">
               {author}
             </a>
             <span className="date">{date}</span>
