@@ -47,3 +47,4 @@ export type PatchUserReq = UserDto<IUserInfo>;
 export type PatchUserRes = UserDto<IGetUser>;
 export type GetUserRes = UserDto<IUserInfo>;
 export type PostFollowRes = ProfileDto<IFollowUser>;
+export type GetProfileRes = ProfileDto<IFollowUser>;
