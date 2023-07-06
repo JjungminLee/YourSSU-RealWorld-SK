@@ -5,8 +5,6 @@ import { useMutation } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
 export const usePostFavorite = () => {
-  const userData = useRecoilValue(userAtom);
-
   return useMutation(postFavorite, {
     onSuccess: () => {
       queryClient.invalidateQueries(['getAricles']);

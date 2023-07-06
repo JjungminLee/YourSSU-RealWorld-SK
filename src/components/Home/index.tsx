@@ -1,4 +1,3 @@
-import React from 'react';
 import { useGetTag } from '../../hooks/useGetTag';
 import PopularTag from './atoms/PopularTag';
 import { useEffect, useState } from 'react';

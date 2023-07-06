@@ -1,4 +1,3 @@
-import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { StrictMode } from 'react';
 import { RecoilRoot } from 'recoil';

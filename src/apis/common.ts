@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export const apiUrl = 'https://api.realworld.io/api';
 
@@ -34,7 +34,7 @@ export class ApiError extends Error {
  * @param getErrorMessage status code에 따라 에러 메시지를 결정하는 함수
  */
 function processError(error: any, errorMessages?: Record<number, string>): ApiError {
-  return new ApiError(error, error.response.data.errors);
+  return new ApiError(error, errorMessages, error.response.data.errors);
 }
 
 /*

@@ -5,8 +5,6 @@ import { useMutation } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
 export const useDeleteFavorite = () => {
-  const userData = useRecoilValue(userAtom);
-
   return useMutation(deleteFavorite, {
     onSuccess: () => {
       queryClient.invalidateQueries(['getAricles']);
