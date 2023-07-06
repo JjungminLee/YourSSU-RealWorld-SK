@@ -12,6 +12,7 @@ import Editor from './components/editor';
 import Settings from './components/settings';
 import Layout from './components/Layout';
 import Article from './components/article';
+import EditArticle from './components/editArticle';
 
 export const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ function App() {
                   <Route path="settings" element={<Settings />}></Route>
                   <Route path="editor" element={<Editor />}></Route>
                   <Route path="/article/:id" element={<Article />}></Route>
+                  <Route path="/editor/:id" element={<EditArticle />}></Route>
                 </Route>
               </Routes>
             </BrowserRouter>

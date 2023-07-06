@@ -65,5 +65,5 @@ export type PostArticleReq = ArticleDto<ArticleRequest>;
 export type PostArticleRes = ArticleDto<ArticleResponse>;
 export type GetArticleListRes = IArticleList;
 export type GetArticleRes = ArticleDto<ArticlesResponse>;
-export type PutArticleReq = ArticleDto<IArticleList>;
+export type PutArticleReq = ArticleDto<ArticleRequest>;
 export type PutArticleRes = ArticleDto<ArticleResponse>;

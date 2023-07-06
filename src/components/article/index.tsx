@@ -45,6 +45,11 @@ export default function Article() {
       navigate('/');
     }
   };
+
+  const onEditArticle = async (slug: string) => {
+    navigate(`/editor/${slug}`);
+  };
+
   return (
     <div className="article-page">
       <div className="banner">
@@ -63,7 +68,9 @@ export default function Article() {
             </div>
             {articleDetail?.author.username === username ? (
               <>
-                <button className="btn btn-outline-secondary btn-sm">
+                <button
+                  className="btn btn-outline-secondary btn-sm"
+                  onClick={() => onEditArticle(articleDetail?.slug as string)}>
                   <i className="ion-edit"></i>
                   &nbsp; Edit Article
                 </button>
