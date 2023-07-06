@@ -16,3 +16,14 @@ export type CommentResponse = {
   body: string;
   author: AuthorResponse;
 };
+
+export type PostCommentResponse = {
+  comment: CommentResponse;
+};
+
+export type PostCommentRequest = {
+  slug: string;
+  comment: {
+    body: string;
+  };
+};

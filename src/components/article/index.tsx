@@ -147,7 +147,7 @@ export default function Article() {
 
         <div className="row">
           <div className="col-xs-12 col-md-8 offset-md-2">
-            <CommentWrite />
+            <CommentWrite accessToken={accessToken} slug={id as string} />
             {commentsData?.comments?.map((item) => {
               return <Comment data={item} token={accessToken} slug={id as string} key={item?.createdAt} />;
             })}
