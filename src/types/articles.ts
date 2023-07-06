@@ -50,6 +50,12 @@ export interface ArticleRequest {
   tagList: string[];
 }
 
+export interface IEditArticle {
+  title: string;
+  description: string;
+  body: string;
+}
+
 export interface IArticleList {
   articles: ArticlesResponse[];
   articleCount: number;
@@ -58,3 +64,6 @@ export interface IArticleList {
 export type PostArticleReq = ArticleDto<ArticleRequest>;
 export type PostArticleRes = ArticleDto<ArticleResponse>;
 export type GetArticleListRes = IArticleList;
+export type GetArticleRes = ArticleDto<ArticlesResponse>;
+export type PutArticleReq = ArticleDto<IArticleList>;
+export type PutArticleRes = ArticleDto<ArticleResponse>;

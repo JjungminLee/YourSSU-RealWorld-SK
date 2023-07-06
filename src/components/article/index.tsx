@@ -1,36 +1,91 @@
-interface IArticleProps {
+import { userAtom } from '@src/states/UserAtom';
+import { useNavigate, useParams } from 'react-router';
+import { useRecoilValue } from 'recoil';
+import { postFollowUser, deleteFollowUser } from '@src/apis/user';
+import { deleteArticleDetail, getArticleDetail } from '@src/apis/articles';
+import { getUserProfile } from '@src/apis/user';
+import { useQuery } from 'react-query';
+import { useState } from 'react';
+
+export interface IArticleProps {
   title: string;
-  imgUrl: string;
+  body: string;
   created: string;
   author: string;
+  tagList: any[];
 }
 
 export default function Article() {
+  const navigate = useNavigate();
+  const accessToken: string = useRecoilValue(userAtom)?.token as string;
+  const username = useRecoilValue(userAtom)?.username;
+  const { id } = useParams();
+  const [follow, setFollow] = useState(false);
+  const { data: articleDetail } = useQuery(['articleDetail', id as string], () => getArticleDetail(id as string));
+  const { data: authorProfile } = useQuery(['authorProfile', follow], () =>
+    getUserProfile(accessToken as string, articleDetail?.author.username as string),
+  );
+  console.log(username, articleDetail?.author.username);
+
+  console.log(follow, 'fff');
+  console.log(authorProfile?.following);
+
+  const onClickFollowBtn = () => {
+    postFollowUser(accessToken as string, articleDetail?.author.username as string);
+    setFollow((prev) => !prev);
+  };
+  const onClickUnfollowBtn = () => {
+    deleteFollowUser(accessToken as string, articleDetail?.author.username as string);
+    setFollow((prev) => !prev);
+  };
+
+  const onDeleteArticle = async (slug: string) => {
+    const res = await deleteArticleDetail(accessToken, slug);
+    if (res === '') {
+      navigate('/');
+    }
+  };
   return (
     <div className="article-page">
       <div className="banner">
         <div className="container">
-          <h1>How to build webapps that scale</h1>
+          <h1>{articleDetail?.title}</h1>
 
           <div className="article-meta">
             <a href="">
               <img src="http://i.imgur.com/Qr71crq.jpg" />
             </a>
             <div className="info">
-              <a href="" className="author">
-                Eric Simons
+              <a href={`/profile/${articleDetail?.author.username}`} className="author">
+                {articleDetail?.author.username}
               </a>
-              <span className="date">January 20th</span>
+              <span className="date">{articleDetail?.createdAt}</span>
             </div>
-            <button className="btn btn-sm btn-outline-secondary">
-              <i className="ion-plus-round"></i>
-              &nbsp; Follow Eric Simons <span className="counter">(10)</span>
-            </button>
-            &nbsp;&nbsp;
-            <button className="btn btn-sm btn-outline-primary">
-              <i className="ion-heart"></i>
-              &nbsp; Favorite Post <span className="counter">(29)</span>
-            </button>
+            {articleDetail?.author.username === username ? (
+              <>
+                <button className="btn btn-outline-secondary btn-sm">
+                  <i className="ion-edit"></i>
+                  &nbsp; Edit Article
+                </button>
+                &nbsp;
+                <button
+                  className="btn btn-outline-danger btn-sm "
+                  onClick={() => onDeleteArticle(articleDetail?.slug as string)}>
+                  <i className="ion-trash-a"></i>
+                  &nbsp; Delete Article
+                </button>
+              </>
+            ) : !authorProfile?.following ? (
+              <button className="btn btn-sm btn-outline-secondary" onClick={onClickFollowBtn}>
+                <i className="ion-plus-round"></i>
+                &nbsp; {`Follow ${articleDetail?.author.username}`} <span className="counter">(10)</span>
+              </button>
+            ) : (
+              <button className="btn btn-sm btn-outline-secondary" onClick={onClickUnfollowBtn}>
+                <i className="ion-plus-round"></i>
+                &nbsp; {`Unfollow ${articleDetail?.author.username}`} <span className="counter">(10)</span>
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -38,9 +93,7 @@ export default function Article() {
       <div className="container page">
         <div className="row article-content">
           <div className="col-md-12">
-            <p>Web development technologies have evolved at an incredible clip over the past few years.</p>
-            <h2 id="introducing-ionic">Introducing RealWorld.</h2>
-            <p>It's a great solution for learning how other frameworks work.</p>
+            <p>{articleDetail?.body}</p>
           </div>
         </div>
 
@@ -53,13 +106,13 @@ export default function Article() {
             </a>
             <div className="info">
               <a href="" className="author">
-                Eric Simons
+                {articleDetail?.author.username}
               </a>
-              <span className="date">January 20th</span>
+              <span className="date">{articleDetail?.createdAt}</span>
             </div>
             <button className="btn btn-sm btn-outline-secondary">
               <i className="ion-plus-round"></i>
-              &nbsp; Follow Eric Simons
+              &nbsp; {`Follow ${articleDetail?.author.username}`}
             </button>
             &nbsp;
             <button className="btn btn-sm btn-outline-primary">

@@ -16,7 +16,7 @@ export default function ArticlePreview({ data, token }: { data: ArticlesResponse
           token={token}
         />
       </div>
-      <a href="" className="preview-link">
+      <a href={`/article/${data.slug}`} className="preview-link">
         <h1>{data?.title}</h1>
         <p>{data?.description}</p>
         <span>Read more...</span>
