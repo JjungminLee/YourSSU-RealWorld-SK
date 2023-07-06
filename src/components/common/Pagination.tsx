@@ -1,4 +1,3 @@
-import React from 'react';
 import { useRecoilState } from 'recoil';
 import { pageState } from '@src/states/pageState';
 import Button from './PaginationButton';

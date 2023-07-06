@@ -1,46 +1,65 @@
 import useInput from '../../hooks/useInput';
-import { PostSignUpReq } from '@src/types/user';
+
 import { useState } from 'react';
 import { postSignUp } from '@src/apis/user';
 import { ISignUp } from '@src/types/user';
 import { useNavigate } from 'react-router';
 
 import { useSetRecoilState } from 'recoil';
-import { userAtom, userPw } from '@src/states/UserAtom';
+import { userAtom } from '@src/states/UserAtom';
 
 export default function SignUp() {
   const navigate = useNavigate();
   const [name, onChangeName] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [email, onChangeEmail] = useInput('');
-  const setPw = useSetRecoilState(userPw);
   const setResult = useSetRecoilState(userAtom);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState<string[]>([]);
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const info: ISignUp = {
       username: name,
       email: email,
       password: password,
     };
-    const req: PostSignUpReq = {
-      user: info,
-    };
-    const response = postSignUp(req);
+
+    const response = await postSignUp(info);
     console.log(response);
-    response
-      .then((item) => {
-        setResult(item);
-        setPw(password);
-      })
-      .catch((error) => {
-        console.log(error);
-        setMessage(error.info);
-        console.log(message);
-        //window.location.replace('/signup');
-      });
+
+    if (response.status != 422) {
+      setResult(response.user);
+      setMessage([]);
+      navigate('/');
+    } else {
+      const { errors } = response.data;
+      console.log(errors);
+      if ('username' in errors) {
+        const username = `username ${errors.username[0]}`;
+        let copy = message; // 배열의 주소를 공우
+        copy.push(username);
+        setMessage([...copy]);
+      }
+      if ('email' in errors) {
+        const email = `email ${errors.email[0]}`;
+        let copy = message;
+        copy.push(email);
+        setMessage([...copy]);
+      }
+
+      if ('password' in errors) {
+        const pw = `password ${errors.password[0]}`;
+        let copy = message; // 배열의 주소를 공우
+        copy.push(pw);
+        setMessage([...copy]);
+      }
+      console.log(message.length);
+    }
   };
+
+  //   <ul className="error-messages">
+  //   <li>{message}</li>
+  // </ul>
   return (
     <>
       <div className="auth-page">
@@ -49,14 +68,16 @@ export default function SignUp() {
             <div className="col-md-6 offset-md-3 col-xs-12">
               <h1 className="text-xs-center">Sign up</h1>
               <p className="text-xs-center">
-                <a href="">Have an account?</a>
+                <a href={`/login`}>Have an account?</a>
               </p>
 
-              {message === '' ? null : (
-                <ul className="error-messages">
-                  <li>{message}</li>
-                </ul>
-              )}
+              {message.length > 1
+                ? message.map((item) => (
+                    <ul className="error-messages">
+                      <li>{item}</li>
+                    </ul>
+                  ))
+                : null}
               <form onSubmit={onSubmit}>
                 <fieldset className="form-group">
                   <input

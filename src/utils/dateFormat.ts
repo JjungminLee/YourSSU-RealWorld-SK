@@ -18,9 +18,6 @@ export const dateFormat = (date: string) => {
 
   const month = Number(currentDate.getMonth() + 1);
   const day = String(currentDate.getDate());
-  const hour = String(currentDate.getHours());
-  const minute = String(currentDate.getMinutes());
-  const second = String(currentDate.getSeconds());
 
   return `${monthArr[month - 1]} ${day}, ${currentDate.getFullYear()}`;
 };

@@ -7,18 +7,21 @@ import { IUserInfo } from '@src/types/user';
 import { useQuery } from 'react-query';
 import { getUserArticle } from '@src/apis/articles';
 import MyArticleItem from './myArticleItem';
-import { useGetArticles } from '@src/hooks/useGetArticles';
 import { useNavigate } from 'react-router';
 
 export default function Profile() {
   const accessToken = useRecoilValue(userAtom)?.token;
   const navigate = useNavigate();
-  const user: string = location.pathname.substring(9);
+
+  let user: string = location.pathname.substring(9);
+  user = decodeURI(user);
+
   const [currentUser, setcurrentUser] = useState<IUserInfo>();
   const userInfo = useRecoilValue(userAtom);
   const [tab, setTab] = useState<string>('MyArticle');
   const [articleActive, setArticleActive] = useState('active');
   const [favoriteActvie, setFavoriteActive] = useState('');
+  const [follow, setFollow] = useState(false);
 
   useEffect(() => {
     const currentUserRes = getCurrentUser(userInfo?.token);
@@ -27,11 +30,11 @@ export default function Profile() {
 
   const onClickFollowBtn = () => {
     postFollowUser(accessToken as string, user);
-    location.reload();
+    setFollow((prev) => !prev);
   };
   const onClickUnfollowBtn = () => {
     deleteFollowUser(accessToken as string, user);
-    location.reload();
+    setFollow((prev) => !prev);
   };
   const onClickSettingBtn = () => {
     navigate('/settings');
@@ -51,9 +54,12 @@ export default function Profile() {
     getUserArticle(user as string, accessToken as string),
   );
 
-  const { data: userProfile } = useQuery(['userProfile', accessToken as string, user as string], () =>
+  const { data: userProfile } = useQuery(['userProfile', follow], () =>
     getUserProfile(accessToken as string, user as string),
   );
+  console.log(user);
+  console.log(userProfile?.following);
+  console.log(follow, 'ffff');
 
   return (
     <>
@@ -107,10 +113,12 @@ export default function Profile() {
               {tab === 'MyArticle'
                 ? myArticleList?.map((item) => (
                     <MyArticleItem
+                      slug={item.slug}
                       author={item.author.username}
                       date={item.createdAt}
                       title={item.title}
                       subTitle={item.description}
+                      tagList={item.tagList}
                     />
                   ))
                 : null}

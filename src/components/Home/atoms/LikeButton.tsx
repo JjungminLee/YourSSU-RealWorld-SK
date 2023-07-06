@@ -16,7 +16,7 @@ export default function LikeButton({
 }) {
   const [favorited, setFavorited] = useState<boolean | null>(defaultFavorited);
 
-  const { mutate: postLike, status } = usePostFavorite();
+  const { mutate: postLike } = usePostFavorite();
   const { mutate: deleteUnlike } = useDeleteFavorite();
 
   const navigate = useNavigate();
