@@ -1,7 +1,6 @@
 import {
   PostSignInReq,
   PostSignInRes,
-  PostSignUpReq,
   PostSignUpRes,
   PatchUserReq,
   PatchUserRes,
