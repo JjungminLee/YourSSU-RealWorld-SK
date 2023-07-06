@@ -1,11 +1,13 @@
 export interface IMyArticleProps {
+  slug: string;
   author: string;
   date: string;
   title: string;
   subTitle: string;
+  tagList: any[];
 }
 
-export default function MyArticleItem({ author, date, title, subTitle }: IMyArticleProps) {
+export default function MyArticleItem({ slug, author, date, title, subTitle, tagList }: IMyArticleProps) {
   return (
     <>
       <div className="article-preview">
@@ -23,14 +25,15 @@ export default function MyArticleItem({ author, date, title, subTitle }: IMyArti
             <i className="ion-heart"></i> 29
           </button>
         </div>
-        <a href="" className="preview-link">
+        <a href={`/article/${slug}`} className="preview-link">
           <h1>{title}</h1>
           <p>{subTitle}</p>
           <span>Read more...</span>
         </a>
         <ul className="tag-list">
-          <li className="tag-default tag-pill tag-outline">Music</li>
-          <li className="tag-default tag-pill tag-outline">Song</li>
+          {tagList.map((item) => (
+            <li className="tag-default tag-pill tag-outline">{item}</li>
+          ))}
         </ul>
       </div>
     </>
