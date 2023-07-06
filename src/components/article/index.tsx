@@ -1,3 +1,10 @@
+interface IArticleProps {
+  title: string;
+  imgUrl: string;
+  created: string;
+  author: string;
+}
+
 export default function Article() {
   return (
     <div className="article-page">

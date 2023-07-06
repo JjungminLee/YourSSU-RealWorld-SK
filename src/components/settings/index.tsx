@@ -1,6 +1,6 @@
 import Footer from '../common/Footer';
 import { useRecoilValue } from 'recoil';
-import { userAtom, userPw } from '@src/states/UserAtom';
+import { userAtom } from '@src/states/UserAtom';
 import useInput from '@src/hooks/useInput';
 import { useNavigate } from 'react-router';
 import { IUserInfo, PatchUserReq } from '@src/types/user';
@@ -9,14 +9,13 @@ import { useState } from 'react';
 
 export default function Settings() {
   const userInfo = useRecoilValue(userAtom);
-  const pw = useRecoilValue(userPw);
   const navigate = useNavigate();
 
   const [name, setName] = useInput(userInfo?.username as string);
   const [image, setImage] = useInput(userInfo?.image as string);
-  const [bio, setBio] = useState('');
+  const [bio, setBio] = useState<string>('');
   const [email, setEmail] = useInput(userInfo?.email as string);
-  const [password, setPassword] = useInput(pw);
+  const [password, setPassword] = useInput('');
 
   const onHandleBio = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setBio(e.target.value);
@@ -97,7 +96,7 @@ export default function Settings() {
                     <input
                       className="form-control form-control-lg"
                       type="password"
-                      value={`${pw}`}
+                      value={`${password}`}
                       onChange={setPassword}
                     />
                   </fieldset>

@@ -7,14 +7,12 @@ import { useSetRecoilState } from 'recoil';
 
 import { postSignIn } from '../../apis/user';
 import { useNavigate } from 'react-router';
-import { userAtom, userPw } from '@src/states/UserAtom';
-import cryptoJs from 'crypto-js';
+import { userAtom } from '@src/states/UserAtom';
 
 export default function UserLogin() {
   const [password, onChangePassword] = useInput('');
   const [email, onChangeEmail] = useInput('');
   const setResult = useSetRecoilState(userAtom);
-  const setPw = useSetRecoilState(userPw);
   const navigate = useNavigate();
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -29,7 +27,6 @@ export default function UserLogin() {
     const response = await postSignIn(req);
     console.log(response);
     setResult(response);
-    setPw(password);
     navigate('/');
   };
 

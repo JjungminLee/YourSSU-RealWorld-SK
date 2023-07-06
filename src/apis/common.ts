@@ -1,6 +1,6 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-const apiUrl = 'https://api.realworld.io/api';
+export const apiUrl = 'https://api.realworld.io/api';
 
 /*
 [[ API 타입 & 유틸 함수 ]]
@@ -11,13 +11,14 @@ const apiUrl = 'https://api.realworld.io/api';
  * @param T info의 타입
  */
 export class ApiError extends Error {
-  error: any;
-  errorMessage: string;
+  error: unknown;
+  errorMessage: any;
   info?: any;
 
-  constructor(error: any, errorMessage: string, info?: any) {
+  constructor(error: Error, errorMessage: any, info?: any) {
     super(errorMessage);
-    this.errorMessage = errorMessage;
+    this.error = error;
+    this.errorMessage = error.message;
     this.info = info;
   }
 }
@@ -33,7 +34,7 @@ export class ApiError extends Error {
  * @param getErrorMessage status code에 따라 에러 메시지를 결정하는 함수
  */
 function processError(error: any, errorMessages?: Record<number, string>): ApiError {
-  return new ApiError(-1, '문제가 발생했어요. 다시 시도하거나 문의해 주세요.', error.response.data.errors);
+  return new ApiError(error, error.response.data.errors);
 }
 
 /*
@@ -91,7 +92,6 @@ export async function postAsync<T, D>(
     });
     return response.data;
   } catch (error) {
-    console.log(error);
     throw processError(error, errorMessages);
   }
 }
