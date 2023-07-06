@@ -111,6 +111,7 @@ export default function Profile() {
                       date={item.createdAt}
                       title={item.title}
                       subTitle={item.description}
+                      tagList={item.tagList}
                     />
                   ))
                 : null}

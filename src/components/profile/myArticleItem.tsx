@@ -3,9 +3,10 @@ export interface IMyArticleProps {
   date: string;
   title: string;
   subTitle: string;
+  tagList: [];
 }
 
-export default function MyArticleItem({ author, date, title, subTitle }: IMyArticleProps) {
+export default function MyArticleItem({ author, date, title, subTitle, tagList }: IMyArticleProps) {
   return (
     <>
       <div className="article-preview">
@@ -29,8 +30,9 @@ export default function MyArticleItem({ author, date, title, subTitle }: IMyArti
           <span>Read more...</span>
         </a>
         <ul className="tag-list">
-          <li className="tag-default tag-pill tag-outline">Music</li>
-          <li className="tag-default tag-pill tag-outline">Song</li>
+          {tagList.map((item) => (
+            <li className="tag-default tag-pill tag-outline">{item}</li>
+          ))}
         </ul>
       </div>
     </>
