@@ -30,7 +30,7 @@ function App() {
                   <Route path="profile/:username" element={<Profile />}></Route>
                   <Route path="settings" element={<Settings />}></Route>
                   <Route path="editor" element={<Editor />}></Route>
-                  <Route path="/article/:id" element={<Article />}></Route>
+                  <Route path="/article/:value" element={<Article />}></Route>
                   <Route path="/editor/:id" element={<EditArticle />}></Route>
                 </Route>
               </Routes>

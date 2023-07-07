@@ -25,18 +25,19 @@ export default function Article() {
   const navigate = useNavigate();
   const accessToken: string = useRecoilValue(userAtom)?.token as string;
   const username = useRecoilValue(userAtom)?.username;
-  const { id } = useParams();
+  const { value } = useParams();
+  console.log(value);
 
-  const { data: articleDetail } = useQuery(['articleDetail', id as string], () => getArticleDetail(id as string));
+  const { data: articleDetail } = useQuery(['articleDetail', value as string], () => getArticleDetail(value as string));
   const { data: authorProfile } = useGetProfile(accessToken as string, username as string);
 
   const { mutate: postFollow } = usePostFollow();
   const { mutate: postUnFollow } = usePostUnfollow();
 
   const { data: commentsData } = useGetComments({
-    path: `articles/${id}/comments`,
+    path: `articles/${value}/comments`,
     accessToken: accessToken,
-    params: { slug: id as string },
+    params: { slug: value as string },
   });
   useEffect(() => {
     console.log(commentsData);
@@ -56,8 +57,8 @@ export default function Article() {
   };
 
   useEffect(() => {
-    console.log(id);
-  }, [id]);
+    console.log(value);
+  }, [value]);
 
   return (
     <div className="article-page">
@@ -144,9 +145,9 @@ export default function Article() {
 
         <div className="row">
           <div className="col-xs-12 col-md-8 offset-md-2">
-            <CommentWrite accessToken={accessToken} slug={id as string} />
+            <CommentWrite accessToken={accessToken} slug={value as string} />
             {commentsData?.comments?.map((item) => {
-              return <Comment data={item} token={accessToken} slug={id as string} key={item?.createdAt} />;
+              return <Comment data={item} token={accessToken} slug={value as string} key={item?.createdAt} />;
             })}
           </div>
         </div>

@@ -68,7 +68,13 @@ export const getUserArticle = async (username: string, accessToken: string) => {
 };
 
 export const getArticleDetail = async (slug: string) => {
-  const response = await getAsync<GetArticleRes, undefined>(`/articles/${slug}`);
+  console.log(slug);
+  const headers = {
+    accept: 'application/json',
+  };
+  const response = await getAsync<GetArticleRes, undefined>(`/articles/${slug}`, { headers });
+  console.log(response);
+
   return response.article;
 };
 
