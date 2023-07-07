@@ -12,6 +12,8 @@ import { useEffect, useState } from 'react';
 import CommentWrite from './atoms/CommentWrite';
 import Comment from './atoms/Comment';
 import { useGetComments } from '@src/hooks/useGetComments';
+import LikeButton from './atoms/LikeButton';
+import { useGetArticleDetail } from '@src/hooks/useGetArticleDetail';
 
 export interface IArticleProps {
   title: string;
@@ -25,12 +27,12 @@ export default function Article() {
   const navigate = useNavigate();
   const accessToken: string = useRecoilValue(userAtom)?.token as string;
   const username = useRecoilValue(userAtom)?.username;
+  const profileImg = useRecoilValue(userAtom)?.image;
   const { value } = useParams();
   console.log(value);
 
-  const { data: articleDetail } = useQuery(['articleDetail', value as string], () => getArticleDetail(value as string));
+  const { data: articleDetail } = useGetArticleDetail({ value: value as string, accessToken });
   const { data: authorProfile } = useGetProfile(accessToken as string, username as string);
-
   const { mutate: postFollow } = usePostFollow();
   const { mutate: postUnFollow } = usePostUnfollow();
 
@@ -57,8 +59,8 @@ export default function Article() {
   };
 
   useEffect(() => {
-    console.log(value);
-  }, [value]);
+    console.log(articleDetail);
+  }, [articleDetail]);
 
   return (
     <div className="article-page">
@@ -136,16 +138,20 @@ export default function Article() {
               &nbsp; {`Follow ${articleDetail?.author.username}`}
             </button>
             &nbsp;
-            <button className="btn btn-sm btn-outline-primary">
-              <i className="ion-heart"></i>
-              &nbsp; Favorite Article <span className="counter">(29)</span>
-            </button>
+            {articleDetail && (
+              <LikeButton
+                favoritesCount={articleDetail?.favoritesCount}
+                defaultFavorited={articleDetail?.favorited}
+                slug={articleDetail?.slug}
+                token={accessToken}
+              />
+            )}
           </div>
         </div>
 
         <div className="row">
           <div className="col-xs-12 col-md-8 offset-md-2">
-            <CommentWrite accessToken={accessToken} slug={value as string} />
+            <CommentWrite accessToken={accessToken} slug={value as string} profileImg={profileImg as string} />
             {commentsData?.comments?.map((item) => {
               return <Comment data={item} token={accessToken} slug={value as string} key={item?.createdAt} />;
             })}

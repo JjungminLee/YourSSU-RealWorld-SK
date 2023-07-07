@@ -6,6 +6,7 @@ import { useMutation } from 'react-query';
 export const useDeleteFavorite = () => {
   return useMutation(deleteFavorite, {
     onSuccess: () => {
+      queryClient.invalidateQueries(['getAricleDetail']);
       queryClient.invalidateQueries(['getAricles']);
     },
   });

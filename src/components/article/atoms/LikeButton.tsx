@@ -20,6 +20,9 @@ export default function LikeButton({
   const { mutate: deleteUnlike } = useDeleteFavorite();
 
   const navigate = useNavigate();
+  useEffect(() => {
+    setFavorited(defaultFavorited);
+  }, [defaultFavorited]);
 
   return (
     <button
@@ -31,10 +34,9 @@ export default function LikeButton({
             setFavorited(null))
           : navigate('/signup');
       }}
-      className={`btn ${
-        favorited === null ? `disabled` : favorited ? `btn-primary` : `btn-outline-primary`
-      } btn-sm pull-xs-right`}>
-      <i className="ion-heart"></i> {favoritesCount}
+      className={`btn btn-sm ${favorited === null ? `disabled` : favorited ? `btn-primary` : `btn-outline-primary`}`}>
+      <i className="ion-heart"></i>
+      &nbsp; Favorite Article <span className="counter">({favoritesCount})</span>
     </button>
   );
 }
