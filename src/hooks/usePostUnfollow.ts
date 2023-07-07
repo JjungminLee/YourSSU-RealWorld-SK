@@ -5,7 +5,7 @@ import { queryClient } from '@src/App';
 export const usePostUnfollow = () => {
   return useMutation(deleteFollowUser, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['postFollow']);
+      queryClient.invalidateQueries(['authorProfile']);
     },
   });
 };

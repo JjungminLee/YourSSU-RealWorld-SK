@@ -52,6 +52,7 @@ export async function postFollowUser({ accessToken, username }: { accessToken: s
     Authorization: `Token ${accessToken}`,
   };
   const response = await postAsync<PostFollowRes, {}>(`/profiles/${username}/follow`, info, { headers });
+  console.log('follow', response);
   return response.profile;
 }
 
@@ -60,6 +61,7 @@ export async function deleteFollowUser({ accessToken, username }: { accessToken:
     Authorization: `Token ${accessToken}`,
   };
   const response = await deleteAsync<PostFollowRes, {}>(`/profiles/${username}/follow`, { headers });
+  console.log('unfollow', response);
   return response.profile;
 }
 

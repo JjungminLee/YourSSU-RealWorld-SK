@@ -1,13 +1,17 @@
 import { userAtom } from '@src/states/UserAtom';
 import { useNavigate, useParams } from 'react-router';
 import { useRecoilValue } from 'recoil';
-import { postFollowUser, deleteFollowUser } from '@src/apis/user';
+
 import { deleteArticleDetail, getArticleDetail } from '@src/apis/articles';
-import { getUserProfile } from '@src/apis/user';
+import useGetProfile from '@src/hooks/useGetProfile';
 import { useQuery } from 'react-query';
-import { useState } from 'react';
 import { usePostFollow } from '@src/hooks/usePostFollow';
 import { usePostUnfollow } from '@src/hooks/usePostUnfollow';
+
+import { useEffect, useState } from 'react';
+import CommentWrite from './atoms/CommentWrite';
+import Comment from './atoms/Comment';
+import { useGetComments } from '@src/hooks/useGetComments';
 
 export interface IArticleProps {
   title: string;
@@ -24,11 +28,21 @@ export default function Article() {
   const { id } = useParams();
 
   const { data: articleDetail } = useQuery(['articleDetail', id as string], () => getArticleDetail(id as string));
-  const { data: authorProfile } = useQuery(['authorProfile'], () =>
-    getUserProfile(accessToken as string, articleDetail?.author.username as string),
-  );
+  const { data: authorProfile } = useGetProfile(accessToken as string, username as string);
+
   const { mutate: postFollow } = usePostFollow();
   const { mutate: postUnFollow } = usePostUnfollow();
+
+  const { data: commentsData } = useGetComments({
+    path: `articles/${id}/comments`,
+    accessToken: accessToken,
+    params: { slug: id as string },
+  });
+  useEffect(() => {
+    console.log(commentsData);
+  }, [commentsData]);
+
+  console.log(authorProfile?.username, authorProfile?.following);
 
   const onDeleteArticle = async (slug: string) => {
     const res = await deleteArticleDetail(accessToken, slug);
@@ -40,6 +54,10 @@ export default function Article() {
   const onEditArticle = async (slug: string) => {
     navigate(`/editor/${slug}`);
   };
+
+  useEffect(() => {
+    console.log(id);
+  }, [id]);
 
   return (
     <div className="article-page">
@@ -126,51 +144,10 @@ export default function Article() {
 
         <div className="row">
           <div className="col-xs-12 col-md-8 offset-md-2">
-            <form className="card comment-form">
-              <div className="card-block">
-                <textarea className="form-control" placeholder="Write a comment..." rows={3}></textarea>
-              </div>
-              <div className="card-footer">
-                <img src="http://i.imgur.com/Qr71crq.jpg" className="comment-author-img" />
-                <button className="btn btn-sm btn-primary">Post Comment</button>
-              </div>
-            </form>
-
-            <div className="card">
-              <div className="card-block">
-                <p className="card-text">With supporting text below as a natural lead-in to additional content.</p>
-              </div>
-              <div className="card-footer">
-                <a href="" className="comment-author">
-                  <img src="http://i.imgur.com/Qr71crq.jpg" className="comment-author-img" />
-                </a>
-                &nbsp;
-                <a href="" className="comment-author">
-                  Jacob Schmidt
-                </a>
-                <span className="date-posted">Dec 29th</span>
-              </div>
-            </div>
-
-            <div className="card">
-              <div className="card-block">
-                <p className="card-text">With supporting text below as a natural lead-in to additional content.</p>
-              </div>
-              <div className="card-footer">
-                <a href="" className="comment-author">
-                  <img src="http://i.imgur.com/Qr71crq.jpg" className="comment-author-img" />
-                </a>
-                &nbsp;
-                <a href="" className="comment-author">
-                  Jacob Schmidt
-                </a>
-                <span className="date-posted">Dec 29th</span>
-                <span className="mod-options">
-                  <i className="ion-edit"></i>
-                  <i className="ion-trash-a"></i>
-                </span>
-              </div>
-            </div>
+            <CommentWrite accessToken={accessToken} slug={id as string} />
+            {commentsData?.comments?.map((item) => {
+              return <Comment data={item} token={accessToken} slug={id as string} key={item?.createdAt} />;
+            })}
           </div>
         </div>
       </div>
