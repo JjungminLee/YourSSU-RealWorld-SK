@@ -3,7 +3,15 @@ import { userAtom } from '@src/states/UserAtom';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
-export default function CommentWrite({ accessToken, slug }: { accessToken: string; slug: string }) {
+export default function CommentWrite({
+  accessToken,
+  slug,
+  profileImg,
+}: {
+  accessToken: string;
+  slug: string;
+  profileImg: string;
+}) {
   const [text, setText] = useState<string>('');
   const userData = useRecoilValue(userAtom);
   const { mutate: postComment } = usePostComment();
@@ -34,7 +42,7 @@ export default function CommentWrite({ accessToken, slug }: { accessToken: strin
               }}></textarea>
           </div>
           <div className="card-footer">
-            <img src="http://i.imgur.com/Qr71crq.jpg" className="comment-author-img" />
+            <img src={profileImg} className="comment-author-img" />
             <button className="btn btn-sm btn-primary">Post Comment</button>
           </div>
         </form>
