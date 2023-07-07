@@ -3,8 +3,13 @@ import Profile from './Profile';
 import { v4 as uuidv4 } from 'uuid';
 import { dateFormat } from '@src/utils/dateFormat';
 import LikeButton from './LikeButton';
+import { useNavigate } from 'react-router';
 
 export default function ArticlePreview({ data, token }: { data: ArticlesResponse; token?: string }) {
+  const navigate = useNavigate();
+  const onClick = (slug: string) => {
+    navigate(`/article/${slug}`);
+  };
   return (
     <div className="article-preview">
       <div className="article-meta">
@@ -16,7 +21,7 @@ export default function ArticlePreview({ data, token }: { data: ArticlesResponse
           token={token}
         />
       </div>
-      <a href={`/article/${data.slug}`} className="preview-link">
+      <div className="preview-link" onClick={() => onClick(data?.slug)}>
         <h1>{data?.title}</h1>
         <p>{data?.description}</p>
         <span>Read more...</span>
@@ -27,7 +32,7 @@ export default function ArticlePreview({ data, token }: { data: ArticlesResponse
             </li>
           ))}
         </ul>
-      </a>
+      </div>
     </div>
   );
 }

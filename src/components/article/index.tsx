@@ -1,10 +1,13 @@
 import { userAtom } from '@src/states/UserAtom';
 import { useNavigate, useParams } from 'react-router';
 import { useRecoilValue } from 'recoil';
-import { postFollowUser, deleteFollowUser } from '@src/apis/user';
+
 import { deleteArticleDetail, getArticleDetail } from '@src/apis/articles';
-import { getUserProfile } from '@src/apis/user';
+import useGetProfile from '@src/hooks/useGetProfile';
 import { useQuery } from 'react-query';
+import { usePostFollow } from '@src/hooks/usePostFollow';
+import { usePostUnfollow } from '@src/hooks/usePostUnfollow';
+
 import { useEffect, useState } from 'react';
 import CommentWrite from './atoms/CommentWrite';
 import Comment from './atoms/Comment';
@@ -22,34 +25,25 @@ export default function Article() {
   const navigate = useNavigate();
   const accessToken: string = useRecoilValue(userAtom)?.token as string;
   const username = useRecoilValue(userAtom)?.username;
-  const { id } = useParams();
-  const [follow, setFollow] = useState(false);
-  const { data: articleDetail } = useQuery(['articleDetail', id as string], () => getArticleDetail(id as string));
-  const { data: authorProfile } = useQuery(['authorProfile', follow], () =>
-    getUserProfile(accessToken as string, articleDetail?.author.username as string),
-  );
+  const { value } = useParams();
+  console.log(value);
+
+  const { data: articleDetail } = useQuery(['articleDetail', value as string], () => getArticleDetail(value as string));
+  const { data: authorProfile } = useGetProfile(accessToken as string, username as string);
+
+  const { mutate: postFollow } = usePostFollow();
+  const { mutate: postUnFollow } = usePostUnfollow();
+
   const { data: commentsData } = useGetComments({
-    path: `articles/${id}/comments`,
+    path: `articles/${value}/comments`,
     accessToken: accessToken,
-    params: { slug: id as string },
+    params: { slug: value as string },
   });
   useEffect(() => {
     console.log(commentsData);
   }, [commentsData]);
 
-  console.log(username, articleDetail?.author.username);
-
-  console.log(follow, 'fff');
-  console.log(authorProfile?.following);
-
-  const onClickFollowBtn = () => {
-    postFollowUser(accessToken as string, articleDetail?.author.username as string);
-    setFollow((prev) => !prev);
-  };
-  const onClickUnfollowBtn = () => {
-    deleteFollowUser(accessToken as string, articleDetail?.author.username as string);
-    setFollow((prev) => !prev);
-  };
+  console.log(authorProfile?.username, authorProfile?.following);
 
   const onDeleteArticle = async (slug: string) => {
     const res = await deleteArticleDetail(accessToken, slug);
@@ -63,8 +57,8 @@ export default function Article() {
   };
 
   useEffect(() => {
-    console.log(id);
-  }, [id]);
+    console.log(value);
+  }, [value]);
 
   return (
     <div className="article-page">
@@ -99,12 +93,16 @@ export default function Article() {
                 </button>
               </>
             ) : !authorProfile?.following ? (
-              <button className="btn btn-sm btn-outline-secondary" onClick={onClickFollowBtn}>
+              <button
+                className="btn btn-sm btn-outline-secondary"
+                onClick={() => postFollow({ accessToken: accessToken as string, username: username as string })}>
                 <i className="ion-plus-round"></i>
                 &nbsp; {`Follow ${articleDetail?.author.username}`} <span className="counter">(10)</span>
               </button>
             ) : (
-              <button className="btn btn-sm btn-outline-secondary" onClick={onClickUnfollowBtn}>
+              <button
+                className="btn btn-sm btn-outline-secondary"
+                onClick={() => postUnFollow({ accessToken: accessToken as string, username: username as string })}>
                 <i className="ion-plus-round"></i>
                 &nbsp; {`Unfollow ${articleDetail?.author.username}`} <span className="counter">(10)</span>
               </button>
@@ -147,9 +145,9 @@ export default function Article() {
 
         <div className="row">
           <div className="col-xs-12 col-md-8 offset-md-2">
-            <CommentWrite accessToken={accessToken} slug={id as string} />
+            <CommentWrite accessToken={accessToken} slug={value as string} />
             {commentsData?.comments?.map((item) => {
-              return <Comment data={item} token={accessToken} slug={id as string} key={item?.createdAt} />;
+              return <Comment data={item} token={accessToken} slug={value as string} key={item?.createdAt} />;
             })}
           </div>
         </div>
