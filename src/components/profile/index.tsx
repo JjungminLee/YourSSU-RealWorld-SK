@@ -4,13 +4,12 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { getCurrentUser } from '@src/apis/user';
 import { IUserInfo } from '@src/types/user';
-import { useQuery } from 'react-query';
-import { getUserArticle } from '@src/apis/articles';
-import MyArticleItem from './myArticleItem';
+import MyArticleItem from './atoms/myArticleItem';
 import { useNavigate } from 'react-router';
 import { usePostFollow } from '@src/hooks/usePostFollow';
 import { usePostUnfollow } from '@src/hooks/usePostUnfollow';
 import useGetProfile from '@src/hooks/useGetProfile';
+import { useGetArticles } from '@src/hooks/useGetArticles';
 
 export default function Profile() {
   const accessToken = useRecoilValue(userAtom)?.token;
@@ -49,9 +48,11 @@ export default function Profile() {
     setFavoriteActive('active');
   };
 
-  const { data: myArticleList } = useQuery(['myArticles', username as string, accessToken as string], () =>
-    getUserArticle(username as string, accessToken as string),
-  );
+  const { data: myArticleList } = useGetArticles({
+    path: 'articles',
+    accessToken: userInfo?.token,
+    params: { author: userInfo?.username },
+  });
 
   return (
     <>
@@ -107,16 +108,7 @@ export default function Profile() {
               </div>
 
               {tab === 'MyArticle'
-                ? myArticleList?.map((item) => (
-                    <MyArticleItem
-                      slug={item.slug}
-                      author={item.author.username}
-                      date={item.createdAt}
-                      title={item.title}
-                      subTitle={item.description}
-                      tagList={item.tagList}
-                    />
-                  ))
+                ? myArticleList?.articles?.map((item) => <MyArticleItem data={item} key={item.createdAt} />)
                 : null}
             </div>
           </div>
