@@ -46,20 +46,22 @@ export async function getCurrentUser(accessToken: string | undefined) {
   return response.user;
 }
 
-export async function postFollowUser(accessToken: string, username: string) {
+export async function postFollowUser({ accessToken, username }: { accessToken: string; username: string }) {
   const info = {};
   const headers = {
     Authorization: `Token ${accessToken}`,
   };
   const response = await postAsync<PostFollowRes, {}>(`/profiles/${username}/follow`, info, { headers });
+  console.log('follow', response);
   return response.profile;
 }
 
-export async function deleteFollowUser(accessToken: string, username: string) {
+export async function deleteFollowUser({ accessToken, username }: { accessToken: string; username: string }) {
   const headers = {
     Authorization: `Token ${accessToken}`,
   };
   const response = await deleteAsync<PostFollowRes, {}>(`/profiles/${username}/follow`, { headers });
+  console.log('unfollow', response);
   return response.profile;
 }
 

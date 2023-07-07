@@ -32,7 +32,9 @@ export default function MyArticleItem({ slug, author, date, title, subTitle, tag
         </a>
         <ul className="tag-list">
           {tagList.map((item) => (
-            <li className="tag-default tag-pill tag-outline">{item}</li>
+            <li className="tag-default tag-pill tag-outline" key={tagList.indexOf(item)}>
+              {item}
+            </li>
           ))}
         </ul>
       </div>
