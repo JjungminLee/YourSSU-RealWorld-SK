@@ -2,40 +2,38 @@ import { useRecoilValue } from 'recoil';
 import { userAtom } from '@src/states/UserAtom';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { deleteFollowUser, getCurrentUser, getUserProfile, postFollowUser } from '@src/apis/user';
+import { getCurrentUser } from '@src/apis/user';
 import { IUserInfo } from '@src/types/user';
 import { useQuery } from 'react-query';
 import { getUserArticle } from '@src/apis/articles';
 import MyArticleItem from './myArticleItem';
 import { useNavigate } from 'react-router';
+import { usePostFollow } from '@src/hooks/usePostFollow';
+import { usePostUnfollow } from '@src/hooks/usePostUnfollow';
+import useGetProfile from '@src/hooks/useGetProfile';
 
 export default function Profile() {
   const accessToken = useRecoilValue(userAtom)?.token;
   const navigate = useNavigate();
-
-  let user: string = location.pathname.substring(9);
-  user = decodeURI(user);
+  let username: string = location.pathname.substring(9);
+  username = decodeURI(username);
 
   const [currentUser, setcurrentUser] = useState<IUserInfo>();
   const userInfo = useRecoilValue(userAtom);
   const [tab, setTab] = useState<string>('MyArticle');
   const [articleActive, setArticleActive] = useState('active');
   const [favoriteActvie, setFavoriteActive] = useState('');
-  const [follow, setFollow] = useState(false);
+
+  const { data: userProfile } = useGetProfile(accessToken as string, username);
+  console.log(userProfile?.following);
+  const { mutate: postFollow } = usePostFollow();
+  const { mutate: postUnFollow } = usePostUnfollow();
 
   useEffect(() => {
     const currentUserRes = getCurrentUser(userInfo?.token);
     currentUserRes.then((res) => setcurrentUser(res));
   }, []);
 
-  const onClickFollowBtn = () => {
-    postFollowUser(accessToken as string, user);
-    setFollow((prev) => !prev);
-  };
-  const onClickUnfollowBtn = () => {
-    deleteFollowUser(accessToken as string, user);
-    setFollow((prev) => !prev);
-  };
   const onClickSettingBtn = () => {
     navigate('/settings');
   };
@@ -50,16 +48,9 @@ export default function Profile() {
     setFavoriteActive('active');
   };
 
-  const { data: myArticleList } = useQuery(['myArticles', user as string, accessToken as string], () =>
-    getUserArticle(user as string, accessToken as string),
+  const { data: myArticleList } = useQuery(['myArticles', username as string, accessToken as string], () =>
+    getUserArticle(username as string, accessToken as string),
   );
-
-  const { data: userProfile } = useQuery(['userProfile', follow], () =>
-    getUserProfile(accessToken as string, user as string),
-  );
-  console.log(user);
-  console.log(userProfile?.following);
-  console.log(follow, 'ffff');
 
   return (
     <>
@@ -71,18 +62,22 @@ export default function Profile() {
                 <img src={userProfile?.image} className="user-img" />
                 <h4>{userProfile?.username}</h4>
                 <p>{userProfile?.bio}</p>
-                {user === currentUser?.username ? (
+                {username === currentUser?.username ? (
                   <button className="btn btn-sm btn-outline-secondary action-btn" onClick={onClickSettingBtn}>
                     <i className="ion-gear-a"></i>
                     &nbsp; {`Edit Profile Settings`}
                   </button>
                 ) : userProfile?.following ? (
-                  <button className="btn btn-sm btn-outline-secondary action-btn" onClick={onClickUnfollowBtn}>
+                  <button
+                    className="btn btn-sm btn-outline-secondary action-btn"
+                    onClick={() => postUnFollow({ accessToken: accessToken as string, username: username })}>
                     <i className="ion-plus-round"></i>
                     &nbsp; {`Unfollow ${userProfile?.username}`}
                   </button>
                 ) : (
-                  <button className="btn btn-sm btn-outline-secondary action-btn" onClick={onClickFollowBtn}>
+                  <button
+                    className="btn btn-sm btn-outline-secondary action-btn"
+                    onClick={() => postFollow({ accessToken: accessToken as string, username: username })}>
                     <i className="ion-plus-round"></i>
                     &nbsp; {`Follow ${userProfile?.username}`}
                   </button>

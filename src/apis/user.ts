@@ -46,7 +46,7 @@ export async function getCurrentUser(accessToken: string | undefined) {
   return response.user;
 }
 
-export async function postFollowUser(accessToken: string, username: string) {
+export async function postFollowUser({ accessToken, username }: { accessToken: string; username: string }) {
   const info = {};
   const headers = {
     Authorization: `Token ${accessToken}`,
@@ -55,7 +55,7 @@ export async function postFollowUser(accessToken: string, username: string) {
   return response.profile;
 }
 
-export async function deleteFollowUser(accessToken: string, username: string) {
+export async function deleteFollowUser({ accessToken, username }: { accessToken: string; username: string }) {
   const headers = {
     Authorization: `Token ${accessToken}`,
   };
