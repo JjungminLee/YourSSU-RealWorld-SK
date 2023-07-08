@@ -69,8 +69,8 @@ export default function Article() {
           <h1>{articleDetail?.title}</h1>
 
           <div className="article-meta">
-            <a href="">
-              <img src="http://i.imgur.com/Qr71crq.jpg" />
+            <a href={`/profile/${articleDetail?.author.username}`}>
+              <img src={articleDetail?.author.image} />
             </a>
             <div className="info">
               <a href={`/profile/${articleDetail?.author.username}`} className="author">
@@ -125,7 +125,7 @@ export default function Article() {
         <div className="article-actions">
           <div className="article-meta">
             <a href="profile.html">
-              <img src="http://i.imgur.com/Qr71crq.jpg" />
+              <img src={articleDetail?.author.image} />
             </a>
             <div className="info">
               <a href="" className="author">
