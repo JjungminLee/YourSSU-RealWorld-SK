@@ -51,7 +51,7 @@ export default function Profile() {
   const { data: myArticleList } = useGetArticles({
     path: 'articles',
     accessToken: userInfo?.token,
-    params: { author: userInfo?.username },
+    params: { author: username },
   });
 
   return (
