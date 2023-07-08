@@ -23,7 +23,7 @@ export default function Profile() {
   const [articleActive, setArticleActive] = useState('active');
   const [favoriteActvie, setFavoriteActive] = useState('');
 
-  const { data: userProfile } = useGetProfile(accessToken as string, username);
+  const { data: userProfile } = useGetProfile(username);
   console.log(userProfile?.username);
   console.log(userProfile?.following);
   const { mutate: postFollow } = usePostFollow();

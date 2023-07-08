@@ -65,10 +65,7 @@ export async function deleteFollowUser({ accessToken, username }: { accessToken:
   return response.profile;
 }
 
-export async function getUserProfile(accessToken: string, username: string) {
-  const headers = {
-    Authorization: `Token ${accessToken}`,
-  };
-  const response = await getAsync<GetProfileRes, {}>(`/profiles/${username}`, { headers });
+export async function getUserProfile(username: string) {
+  const response = await getAsync<GetProfileRes, {}>(`/profiles/${username}`);
   return response.profile;
 }
