@@ -3,13 +3,22 @@ import LikeButton from './LikeButton';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from '@src/states/UserAtom';
 import { dateFormat } from '@src/utils/dateFormat';
+import { useNavigate } from 'react-router';
 
 export interface IMyArticleProps {
   data: ArticlesResponse;
 }
 
 export default function MyArticleItem({ data }: IMyArticleProps) {
+  const navigate = useNavigate();
   const userInfo = useRecoilValue(userAtom);
+
+  const onArticleClick = (slug: string) => {
+    {
+      navigate(`/article/${data.slug}`);
+    }
+  };
+
   return (
     <>
       <div className="article-preview">
@@ -30,11 +39,11 @@ export default function MyArticleItem({ data }: IMyArticleProps) {
             token={userInfo?.token}
           />
         </div>
-        <a href={`/article/${data.slug}`} className="preview-link">
+        <div onClick={() => onArticleClick(data.slug)} className="preview-link">
           <h1>{data.title}</h1>
           <p>{data.description}</p>
           <span>Read more...</span>
-        </a>
+        </div>
         <ul className="tag-list">
           {data.tagList.map((item) => (
             <li className="tag-default tag-pill tag-outline" key={data.tagList.indexOf(item)}>

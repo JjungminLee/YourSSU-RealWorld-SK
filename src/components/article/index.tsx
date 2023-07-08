@@ -32,7 +32,7 @@ export default function Article() {
   console.log(value);
 
   const { data: articleDetail } = useGetArticleDetail({ value: value as string, accessToken });
-  const { data: authorProfile } = useGetProfile(accessToken as string, username as string);
+  const { data: authorProfile } = useGetProfile(username as string);
   const { mutate: postFollow } = usePostFollow();
   const { mutate: postUnFollow } = usePostUnfollow();
 
