@@ -1,6 +1,6 @@
 import { useDeleteFavorite } from '@src/hooks/useDeleteFavorite';
 import { usePostFavorite } from '@src/hooks/usePostFavorite';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 export default function LikeButton({
@@ -20,6 +20,10 @@ export default function LikeButton({
   const { mutate: deleteUnlike } = useDeleteFavorite();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setFavorited(defaultFavorited);
+  }, [defaultFavorited]);
 
   return (
     <button
