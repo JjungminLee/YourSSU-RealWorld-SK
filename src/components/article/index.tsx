@@ -4,9 +4,6 @@ import { useRecoilValue } from 'recoil';
 
 import { deleteArticleDetail, getArticleDetail } from '@src/apis/articles';
 import useGetProfile from '@src/hooks/useGetProfile';
-import { useQuery } from 'react-query';
-import { usePostFollow } from '@src/hooks/usePostFollow';
-import { usePostUnfollow } from '@src/hooks/usePostUnfollow';
 
 import { useEffect, useState } from 'react';
 import CommentWrite from './atoms/CommentWrite';
@@ -14,6 +11,7 @@ import Comment from './atoms/Comment';
 import { useGetComments } from '@src/hooks/useGetComments';
 import LikeButton from './atoms/LikeButton';
 import { useGetArticleDetail } from '@src/hooks/useGetArticleDetail';
+import { deleteFollowUser, postFollowUser } from '@src/apis/user';
 
 export interface IArticleProps {
   title: string;
@@ -33,8 +31,7 @@ export default function Article() {
 
   const { data: articleDetail } = useGetArticleDetail({ value: value as string, accessToken });
   const { data: authorProfile } = useGetProfile(username as string);
-  const { mutate: postFollow } = usePostFollow();
-  const { mutate: postUnFollow } = usePostUnfollow();
+  const [follow, setFollow] = useState(authorProfile?.following);
 
   const { data: commentsData } = useGetComments({
     path: `articles/${value}/comments`,
@@ -56,6 +53,15 @@ export default function Article() {
 
   const onEditArticle = async (slug: string) => {
     navigate(`/editor/${slug}`);
+  };
+  const onFollowClick = () => {
+    setFollow(true);
+    postFollowUser(accessToken as string, authorProfile?.username as string);
+  };
+
+  const onUnfollowClick = () => {
+    setFollow(false);
+    deleteFollowUser(accessToken as string, authorProfile?.username as string);
   };
 
   useEffect(() => {
@@ -94,17 +100,13 @@ export default function Article() {
                   &nbsp; Delete Article
                 </button>
               </>
-            ) : !authorProfile?.following ? (
-              <button
-                className="btn btn-sm btn-outline-secondary"
-                onClick={() => postFollow({ accessToken: accessToken as string, username: username as string })}>
+            ) : !follow ? (
+              <button className="btn btn-sm btn-outline-secondary" onClick={onFollowClick}>
                 <i className="ion-plus-round"></i>
                 &nbsp; {`Follow ${articleDetail?.author.username}`} <span className="counter">(10)</span>
               </button>
             ) : (
-              <button
-                className="btn btn-sm btn-outline-secondary"
-                onClick={() => postUnFollow({ accessToken: accessToken as string, username: username as string })}>
+              <button className="btn btn-sm btn-outline-secondary" onClick={onUnfollowClick}>
                 <i className="ion-plus-round"></i>
                 &nbsp; {`Unfollow ${articleDetail?.author.username}`} <span className="counter">(10)</span>
               </button>

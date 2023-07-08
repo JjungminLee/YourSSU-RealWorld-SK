@@ -2,14 +2,14 @@ import { useRecoilValue } from 'recoil';
 import { userAtom } from '@src/states/UserAtom';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { getCurrentUser } from '@src/apis/user';
+import { deleteFollowUser, getCurrentUser, postFollowUser } from '@src/apis/user';
 import { IUserInfo } from '@src/types/user';
 import MyArticleItem from './atoms/myArticleItem';
 import { useNavigate } from 'react-router';
-import { usePostFollow } from '@src/hooks/usePostFollow';
-import { usePostUnfollow } from '@src/hooks/usePostUnfollow';
+
 import useGetProfile from '@src/hooks/useGetProfile';
 import { useGetArticles } from '@src/hooks/useGetArticles';
+import axios from 'axios';
 
 export default function Profile() {
   const accessToken = useRecoilValue(userAtom)?.token;
@@ -24,10 +24,7 @@ export default function Profile() {
   const [favoriteActvie, setFavoriteActive] = useState('');
 
   const { data: userProfile } = useGetProfile(username);
-  console.log(userProfile?.username);
-  console.log(userProfile?.following);
-  const { mutate: postFollow } = usePostFollow();
-  const { mutate: postUnFollow } = usePostUnfollow();
+  const [follow, setFollow] = useState(userProfile?.following);
 
   useEffect(() => {
     const currentUserRes = getCurrentUser(userInfo?.token);
@@ -46,6 +43,15 @@ export default function Profile() {
     setTab('Favorite');
     setArticleActive('');
     setFavoriteActive('active');
+  };
+  const onFollowClick = () => {
+    setFollow(true);
+    postFollowUser(accessToken as string, username as string);
+  };
+
+  const onUnfollowClick = () => {
+    setFollow(false);
+    deleteFollowUser(accessToken as string, username as string);
   };
 
   const { data: myArticleList } = useGetArticles({
@@ -69,17 +75,13 @@ export default function Profile() {
                     <i className="ion-gear-a"></i>
                     &nbsp; {`Edit Profile Settings`}
                   </button>
-                ) : userProfile?.following ? (
-                  <button
-                    className="btn btn-sm btn-outline-secondary action-btn"
-                    onClick={() => postUnFollow({ accessToken: accessToken as string, username: username })}>
+                ) : follow ? (
+                  <button className="btn btn-sm btn-outline-secondary action-btn" onClick={onUnfollowClick}>
                     <i className="ion-plus-round"></i>
                     &nbsp; {`Unfollow ${userProfile?.username}`}
                   </button>
                 ) : (
-                  <button
-                    className="btn btn-sm btn-outline-secondary action-btn"
-                    onClick={() => postFollow({ accessToken: accessToken as string, username: username })}>
+                  <button className="btn btn-sm btn-outline-secondary action-btn" onClick={onFollowClick}>
                     <i className="ion-plus-round"></i>
                     &nbsp; {`Follow ${userProfile?.username}`}
                   </button>
@@ -108,7 +110,7 @@ export default function Profile() {
               </div>
 
               {tab === 'MyArticle'
-                ? myArticleList?.articles?.map((item) => <MyArticleItem data={item} key={item.createdAt} />)
+                ? myArticleList?.articles?.map((item) => <MyArticleItem data={item} key={item.slug} />)
                 : null}
             </div>
           </div>
