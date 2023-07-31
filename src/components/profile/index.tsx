@@ -9,7 +9,9 @@ import { useNavigate } from 'react-router';
 
 import useGetProfile from '@src/hooks/useGetProfile';
 import { useGetArticles } from '@src/hooks/useGetArticles';
+import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
+
 
 export default function Profile() {
   const accessToken = useRecoilValue(userAtom)?.token;
@@ -59,6 +61,16 @@ export default function Profile() {
     accessToken: userInfo?.token,
     params: { author: username },
   });
+
+  const { data: favoritedArticleList } = useGetArticles({
+    path: 'articles',
+    accessToken: userInfo?.token,
+    params: { favorited: username },
+  });
+
+  useEffect(() => {
+    console.log(favoritedArticleList);
+  }, [favoritedArticleList]);
 
   return (
     <>
@@ -110,8 +122,8 @@ export default function Profile() {
               </div>
 
               {tab === 'MyArticle'
-                ? myArticleList?.articles?.map((item) => <MyArticleItem data={item} key={item.slug} />)
-                : null}
+                ? myArticleList?.articles?.map((item) => <MyArticleItem data={item} key={uuidv4()} />)
+                : favoritedArticleList?.articles.map((item) => <MyArticleItem data={item} key={uuidv4()} />)}
             </div>
           </div>
         </div>

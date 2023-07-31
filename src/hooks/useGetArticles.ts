@@ -13,6 +13,6 @@ export const useGetArticles = ({
 }) => {
   return useQuery<ArticleResponse>(['getAricles', params, accessToken], () => getArticles(path, params, accessToken), {
     staleTime: 300 * 1000,
-    notifyOnChangeProps: 'tracked',
+    notifyOnChangeProps: ['data'],
   });
 };
