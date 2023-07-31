@@ -2,7 +2,7 @@ import { userAtom } from '@src/states/UserAtom';
 import { useNavigate, useParams } from 'react-router';
 import { useRecoilValue } from 'recoil';
 
-import { deleteArticleDetail, getArticleDetail } from '@src/apis/articles';
+import { deleteArticleDetail } from '@src/apis/articles';
 import useGetProfile from '@src/hooks/useGetProfile';
 
 import { useEffect, useState } from 'react';

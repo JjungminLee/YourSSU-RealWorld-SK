@@ -15,7 +15,7 @@ export default function MyArticleItem({ data }: IMyArticleProps) {
 
   const onArticleClick = (slug: string) => {
     {
-      navigate(`/article/${data.slug}`);
+      navigate(`/article/${slug}`);
     }
   };
 

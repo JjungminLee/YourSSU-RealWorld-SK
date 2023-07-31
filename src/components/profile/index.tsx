@@ -9,9 +9,8 @@ import { useNavigate } from 'react-router';
 
 import useGetProfile from '@src/hooks/useGetProfile';
 import { useGetArticles } from '@src/hooks/useGetArticles';
-import { v4 as uuidv4 } from 'uuid';
-import axios from 'axios';
 
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Profile() {
   const accessToken = useRecoilValue(userAtom)?.token;
